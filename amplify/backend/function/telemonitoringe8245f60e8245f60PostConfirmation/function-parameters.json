@@ -1,0 +1,18 @@
+{
+  "trigger": true,
+  "modules": [
+    "add-to-group"
+  ],
+  "parentResource": "telemonitoringe8245f60e8245f60",
+  "functionName": "telemonitoringe8245f60e8245f60PostConfirmation",
+  "resourceName": "telemonitoringe8245f60e8245f60PostConfirmation",
+  "parentStack": "auth",
+  "triggerEnvs": [],
+  "triggerDir": "/snapshot/repo/build/node_modules/@aws-amplify/amplify-category-auth/provider-utils/awscloudformation/triggers/PostConfirmation",
+  "triggerTemplate": "PostConfirmation.json.ejs",
+  "triggerEventPath": "PostConfirmation.event.json",
+  "roleName": "telemonitoringe8245f60e8245f60PostConfirmation",
+  "skipEdit": true,
+  "GROUP": "Doctors",
+  "enableCors": false
+}
