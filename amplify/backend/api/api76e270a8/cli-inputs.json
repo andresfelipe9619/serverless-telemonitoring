@@ -1,0 +1,59 @@
+{
+  "version": 1,
+  "paths": {
+    "/telemonitoring": {
+      "name": "/telemonitoring",
+      "lambdaFunction": "telemonitoringAPI",
+      "permissions": {
+        "groups": {
+          "Doctors": [
+            "create",
+            "read",
+            "update",
+            "delete"
+          ],
+          "Patients": [
+            "read"
+          ]
+        },
+        "setting": "private"
+      }
+    },
+    "/oximetry": {
+      "name": "/oximetry",
+      "lambdaFunction": "telemonitoringAPI",
+      "permissions": {
+        "groups": {
+          "Doctors": [
+            "create",
+            "read",
+            "update",
+            "delete"
+          ],
+          "Patients": [
+            "read"
+          ]
+        },
+        "setting": "private"
+      }
+    },
+    "/patients": {
+      "name": "/patients",
+      "lambdaFunction": "telemonitoringAPI",
+      "permissions": {
+        "groups": {
+          "Doctors": [
+            "create",
+            "read",
+            "update",
+            "delete"
+          ],
+          "Patients": [
+            "read"
+          ]
+        },
+        "setting": "private"
+      }
+    }
+  }
+}

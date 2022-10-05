@@ -21,6 +21,10 @@
           "GROUP": "Doctors",
           "deploymentBucketName": "amplify-telemonitoring-dev-85909-deployment",
           "s3Key": "amplify-builds/telemonitoringe8245f60e8245f60PostConfirmation-5346544b6e70626c2f59-build.zip"
+        },
+        "telemonitoringAPI": {
+          "deploymentBucketName": "amplify-telemonitoring-dev-85909-deployment",
+          "s3Key": "amplify-builds/telemonitoringAPI-70673642455139587672-build.zip"
         }
       },
       "storage": {
