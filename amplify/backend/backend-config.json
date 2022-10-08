@@ -6,7 +6,7 @@
       "dependsOn": [
         {
           "category": "auth",
-          "resourceName": "telemonitoringe8245f60e8245f60",
+          "resourceName": "telemonitoringCognito",
           "attributes": [
             "UserPoolId",
             "AppClientIDWeb",
@@ -16,13 +16,13 @@
         }
       ]
     },
-    "telemonitoringe8245f60e8245f60": {
+    "telemonitoringCognito": {
       "service": "Cognito",
       "providerPlugin": "awscloudformation",
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "telemonitoringe8245f60e8245f60PostConfirmation",
+          "resourceName": "telemonitoringCognitoPostConfirmation",
           "triggerProvider": "Cognito",
           "attributes": [
             "Arn",
@@ -54,86 +54,10 @@
     }
   },
   "function": {
-    "telemonitoringe8245f60e8245f60PostConfirmation": {
+    "telemonitoringCognitoPostConfirmation": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
-    },
-    "telemonitoringAPI": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "Datostelemonitoreo",
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "attributeEnvMap": {
-            "Name": "TABLE_NAME",
-            "Arn": "TABLE_ARN"
-          }
-        }
-      ]
-    }
-  },
-  "storage": {
-    "Datostelemonitoreo": {
-      "service": "DynamoDB",
-      "serviceType": "imported",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": []
-    },
-    "DatosOximetria": {
-      "service": "DynamoDB",
-      "serviceType": "imported",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": []
-    }
-  },
-  "hosting": {
-    "S3AndCloudFront": {
-      "service": "S3AndCloudFront",
-      "providerPlugin": "awscloudformation"
-    }
-  },
-  "api": {
-    "api76e270a8": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "telemonitoringAPI",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        },
-        {
-          "category": "auth",
-          "resourceName": "telemonitoringe8245f60e8245f60",
-          "attributes": [
-            "UserPoolId"
-          ]
-        },
-        {
-          "category": "auth",
-          "resourceName": "userPoolGroups",
-          "attributes": [
-            "DoctorsGroupRole"
-          ]
-        },
-        {
-          "category": "auth",
-          "resourceName": "userPoolGroups",
-          "attributes": [
-            "PatientsGroupRole"
-          ]
-        }
-      ]
     }
   }
 }

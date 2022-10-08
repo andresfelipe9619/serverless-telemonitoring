@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "telemonitoringe8245f60_identitypool_e8245f60",
+    "identityPoolName": "telemonitoring_identity_pool",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "telemoe8245f60",
-    "userPoolName": "telemonitoringe8245f60_userpool_e8245f60",
+    "resourceNameTruncated": "telemo5d5c8ad8",
+    "userPoolName": "telemonitoring_userpool",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -31,10 +31,10 @@
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "telemoe8245f60_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "telemo5d5c8ad8_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "e8245f60",
-    "resourceName": "telemonitoringe8245f60e8245f60",
+    "sharedId": "5d5c8ad8",
+    "resourceName": "telemonitoringCognito",
     "authSelections": "identityPoolAndUserPool",
     "useDefault": "manual",
     "thirdPartyAuth": false,
