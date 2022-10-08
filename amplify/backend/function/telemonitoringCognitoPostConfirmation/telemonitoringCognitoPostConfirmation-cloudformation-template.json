@@ -213,7 +213,7 @@
                 "cognito-idp:AdminAddUserToGroup"
               ],
               "Resource": [
-                "arn:aws:cognito-idp:us-east-1:710888295133:userpool/us-east-1_bHNIIlf8Y"
+                "arn:aws:cognito-idp:us-east-1:710888295133:userpool/us-east-1_mJPaa0N7n"
               ]
             }
           ]
