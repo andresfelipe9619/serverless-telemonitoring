@@ -9,16 +9,40 @@
       "UnauthRoleName": "amplify-telemonitoringapp-dev-225853-unauthRole",
       "StackName": "amplify-telemonitoringapp-dev-225853",
       "StackId": "arn:aws:cloudformation:us-east-1:710888295133:stack/amplify-telemonitoringapp-dev-225853/879f22f0-46bd-11ed-a413-0eca3f1ba695",
-      "AmplifyAppId": "dmc1yfsa512je"
+      "AmplifyAppId": "dmc1yfsa512je",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-telemonitoringapp-dev-225853-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     },
     "categories": {
       "auth": {
-        "telemonitoringCognito": {}
+        "telemonitoringCognito": {},
+        "userPoolGroups": {}
       },
       "function": {
         "telemonitoringCognitoPostConfirmation": {
-          "GROUP": "Doctors"
+          "GROUP": "Doctors",
+          "deploymentBucketName": "amplify-telemonitoringapp-dev-225853-deployment",
+          "s3Key": "amplify-builds/telemonitoringCognitoPostConfirmation-4a4966714d4b6e465650-build.zip"
+        },
+        "telemonitoringAPI": {
+          "deploymentBucketName": "amplify-telemonitoringapp-dev-225853-deployment",
+          "s3Key": "amplify-builds/telemonitoringAPI-713645556b6536464672-build.zip"
         }
+      },
+      "storage": {
+        "Datostelemonitoreo": {
+          "tableName": "Datos_telemonitoreo",
+          "region": "us-east-1",
+          "arn": "arn:aws:dynamodb:us-east-1:710888295133:table/Datos_telemonitoreo",
+          "streamArn": "arn:aws:dynamodb:us-east-1:710888295133:table/Datos_telemonitoreo/stream/2022-10-08T02:43:12.216",
+          "partitionKeyName": "timestamp",
+          "partitionKeyType": "S"
+        }
+      },
+      "api": {
+        "api": {}
+      },
+      "hosting": {
+        "S3AndCloudFront": {}
       }
     }
   }

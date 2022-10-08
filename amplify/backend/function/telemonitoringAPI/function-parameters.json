@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "storage": {
+      "Datostelemonitoreo": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
