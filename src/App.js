@@ -1,52 +1,88 @@
-import { useState } from 'react'
-import { API, Amplify } from 'aws-amplify'
-import { withAuthenticator, Button, Heading, Flex } from '@aws-amplify/ui-react'
-import logo from './logo.svg'
+import React from 'react'
+import { Amplify, Auth } from 'aws-amplify'
+import { Authenticator } from '@aws-amplify/ui-react'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
+import Pages from './pages'
+import SignUp from './pages/auth/SignUp'
+import ErrorPage from './pages/error/ErrorPage'
+import PatientDetail from './pages/patients/PatientDetail'
 import awsExports from './aws-exports'
 import './App.css'
 import '@aws-amplify/ui-react/styles.css'
 
 Amplify.configure(awsExports)
 
-function App ({ user, signOut }) {
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(false)
-
-  async function getTelemonitoringData () {
-    try {
-      setLoading(true)
-      const response = await API.get('api', '/telemonitoring/timestamp')
-      console.log('response', response)
-      setData(response)
-    } catch (error) {
-      console.error(error)
-    } finally {
-      setLoading(false)
+const router = authenticatorProps =>
+  createBrowserRouter([
+    {
+      path: '/',
+      element: <Pages {...authenticatorProps} />,
+      errorElement: <ErrorPage />
+    },
+    {
+      path: '/patients/:id',
+      element: <PatientDetail {...authenticatorProps} />,
+      errorElement: <ErrorPage />
     }
-  }
+  ])
 
+function App () {
   return (
-    <div className='App'>
-      <Flex
-        direction={'column'}
-        justifyContent='center'
-        alignContent={'center'}
-        className='App-header'
-      >
-        <img src={logo} className='App-logo' alt='logo' />
-        <Heading level={1}>Hello {user.username}</Heading>
-        {!data.length && (
-          <Button onClick={getTelemonitoringData}>
-            {loading ? 'Loading...' : 'Get Telemonitoring'}
-          </Button>
-        )}
-        {data.map((item, i) => (
-          <Heading level={2}>{i} - {item.device_id}; HB: {item.HeartBeat}; SPO2: {item.Spo2}</Heading>
-        ))}
-        <Button onClick={signOut}>Sign out</Button>
-      </Flex>
-    </div>
+    <Authenticator
+      components={{
+        SignUp
+      }}
+      services={{
+        handleSignUp,
+        validateCustomSignUp
+      }}
+    >
+      {authenticatorProps => (
+        <RouterProvider router={router(authenticatorProps)} />
+      )}
+    </Authenticator>
   )
 }
 
-export default withAuthenticator(App)
+async function handleSignUp (formData) {
+  console.log('formData', formData)
+  let { username, password, attributes } = formData
+  // custom username
+  username = username.toLowerCase()
+  attributes.email = attributes.email.toLowerCase()
+  return Auth.signUp({
+    username,
+    password,
+    attributes
+  })
+}
+
+async function validateCustomSignUp (formData) {
+  if (!formData.sex) {
+    return {
+      sex: 'Sexo es obligatorio'
+    }
+  }
+  if (!formData.weight) {
+    return {
+      weight: 'Peso es obligatorio'
+    }
+  }
+  if (!formData.name) {
+    return {
+      name: 'Nombre es obligatorio'
+    }
+  }
+  if (!formData.lastname) {
+    return {
+      lastname: 'Apellido es obligatorio'
+    }
+  }
+  if (!formData.birthday) {
+    return {
+      lastname: 'Apellido es obligatorio'
+    }
+  }
+}
+
+export default App
