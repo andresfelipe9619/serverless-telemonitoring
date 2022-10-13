@@ -1,0 +1,55 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-telemonitoringapp-dev-211049-authRole",
+      "UnauthRoleArn": "arn:aws:iam::710888295133:role/amplify-telemonitoringapp-dev-211049-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::710888295133:role/amplify-telemonitoringapp-dev-211049-authRole",
+      "Region": "us-east-1",
+      "DeploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
+      "UnauthRoleName": "amplify-telemonitoringapp-dev-211049-unauthRole",
+      "StackName": "amplify-telemonitoringapp-dev-211049",
+      "StackId": "arn:aws:cloudformation:us-east-1:710888295133:stack/amplify-telemonitoringapp-dev-211049/43129bc0-4a9c-11ed-ac27-0a87f4f66b65",
+      "AmplifyAppId": "dj24nx5cnbw6g",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-telemonitoringapp-dev-211049-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "auth": {
+        "telemonitoringauth": {},
+        "userPoolGroups": {}
+      },
+      "function": {
+        "telemonitoringauthPostConfirmation": {
+          "GROUP": "Doctors",
+          "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
+          "s3Key": "amplify-builds/telemonitoringauthPostConfirmation-30345438746661306879-build.zip"
+        }
+      },
+      "storage": {
+        "DatosOximetria": {
+          "tableName": "Datos_Oximetria",
+          "region": "us-east-1",
+          "arn": "arn:aws:dynamodb:us-east-1:710888295133:table/Datos_Oximetria",
+          "streamArn": "arn:aws:dynamodb:us-east-1:710888295133:table/Datos_Oximetria/stream/2022-10-08T02:43:01.151",
+          "partitionKeyName": "timestamp",
+          "partitionKeyType": "S"
+        },
+        "Datostelemonitoreo": {
+          "tableName": "Datos_telemonitoreo",
+          "region": "us-east-1",
+          "arn": "arn:aws:dynamodb:us-east-1:710888295133:table/Datos_telemonitoreo",
+          "streamArn": "arn:aws:dynamodb:us-east-1:710888295133:table/Datos_telemonitoreo/stream/2022-10-08T02:43:12.216",
+          "partitionKeyName": "timestamp",
+          "partitionKeyType": "S"
+        },
+        "Usuarios": {
+          "tableName": "Usuarios",
+          "region": "us-east-1",
+          "arn": "arn:aws:dynamodb:us-east-1:710888295133:table/Usuarios",
+          "streamArn": "arn:aws:dynamodb:us-east-1:710888295133:table/Usuarios/stream/2022-10-08T15:26:05.690",
+          "partitionKeyName": "email",
+          "partitionKeyType": "S"
+        }
+      }
+    }
+  }
+}
