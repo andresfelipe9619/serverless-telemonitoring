@@ -21,7 +21,7 @@
         "telemonitoringauthPostConfirmation": {
           "GROUP": "Doctors",
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
-          "s3Key": "amplify-builds/telemonitoringauthPostConfirmation-30345438746661306879-build.zip"
+          "s3Key": "amplify-builds/telemonitoringauthPostConfirmation-2f633231542f7746626e-build.zip"
         }
       },
       "storage": {
@@ -49,6 +49,9 @@
           "partitionKeyName": "email",
           "partitionKeyType": "S"
         }
+      },
+      "hosting": {
+        "S3AndCloudFront": {}
       }
     }
   }
