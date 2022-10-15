@@ -1,7 +1,31 @@
-import React from 'react'
+import { Alert, Heading, Loader } from '@aws-amplify/ui-react'
+import React, { useEffect } from 'react'
+import useTelemonitoring from '../../hooks/useTelemonitoring'
 
-export default function ReportsPage() {
+export default function ReportsPage () {
+  const [
+    { data, error, loading },
+    { getTelemonitoringData }
+  ] = useTelemonitoring()
+
+  useEffect(() => {
+    getTelemonitoringData()
+    // eslint-disable-next-line
+  }, [])
+
+  const haveData = !!data.length
+  const showLoader = !haveData && loading
+
   return (
-    <div>ReportsPage</div>
+    <div>
+      {error && <Alert variation='error'>{error}</Alert>}
+      {showLoader && <Loader variation='linear' />}
+      {haveData &&
+        data.map((item, i) => (
+          <Heading level={2}>
+            {i} - {item.device_id}; HB: {item.HeartBeat}; SPO2: {item.Spo2}
+          </Heading>
+        ))}
+    </div>
   )
 }

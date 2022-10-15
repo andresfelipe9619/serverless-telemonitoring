@@ -6,7 +6,8 @@ import './styles.css'
 
 export default function Header (props) {
   const navigate = useNavigate()
-  const go2 = () => path => navigate(path)
+  const go2 = path => () => navigate(path)
+
   return (
     <div className='header'>
       <Flex>

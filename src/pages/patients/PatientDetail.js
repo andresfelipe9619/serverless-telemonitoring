@@ -1,26 +1,13 @@
-import React, { useState } from 'react'
-import { API } from 'aws-amplify'
-import { Alert, Button, Heading, Flex } from '@aws-amplify/ui-react'
+import React from 'react'
+import { Heading, Flex, Image, Card, Button } from '@aws-amplify/ui-react'
 import logo from '../../logo.svg'
+import Header from '../home/Header'
+import { useNavigate } from 'react-router-dom'
 
 export default function PatientDetail ({ user, signOut }) {
-  const [data, setData] = useState([])
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const navigate = useNavigate()
+  const go2 = path => () => navigate(path)
 
-  async function getTelemonitoringData () {
-    try {
-      setLoading(true)
-      const response = await API.get('api', '/telemonitoring/timestamp')
-      console.log('response', response)
-      setData(response)
-    } catch (error) {
-      console.error(error)
-      setError(error)
-    } finally {
-      setLoading(false)
-    }
-  }
   return (
     <Flex
       direction={'column'}
@@ -28,21 +15,24 @@ export default function PatientDetail ({ user, signOut }) {
       alignContent={'center'}
       className='App-header'
     >
-      {error && <Alert variation='error'>{error}</Alert>}
-
-      <img src={logo} className='App-logo' alt='logo' />
-      <Heading level={1}>Hello {user.username}</Heading>
-      {!data.length && (
-        <Button onClick={getTelemonitoringData}>
-          {loading ? 'Loading...' : 'Get Telemonitoring'}
-        </Button>
-      )}
-      {data.map((item, i) => (
-        <Heading level={2}>
-          {i} - {item.device_id}; HB: {item.HeartBeat}; SPO2: {item.Spo2}
-        </Heading>
-      ))}
-      <Button onClick={signOut}>Sign out</Button>
+      <Card>
+        <Header>DATOS DEL PACIENTE</Header>
+        <Image
+          alt='Foto Paciente'
+          src={logo}
+          objectFit='initial'
+          objectPosition='50% 50%'
+          backgroundColor='initial'
+          height='75%'
+          width='75%'
+          opacity='100%'
+        />
+        <Heading level={1}>Hello {user.username}</Heading>
+      </Card>
+      <Card>
+        <Header>VISUALIZACIÓN DE LECTURA SIGNOS VITALES </Header>
+        <Button onClick={go2(`/reports/${user.username}`)}>Historial</Button>
+      </Card>
     </Flex>
   )
 }

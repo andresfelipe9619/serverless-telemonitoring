@@ -25,13 +25,13 @@ const router = authenticatorProps =>
           path: '/',
           element: (
             <ProtectedRoute {...authenticatorProps}>
-              <PatientsPage />
+              <PatientsPage {...authenticatorProps} />
             </ProtectedRoute>
           )
         },
         {
-          path: '/report',
-          element: <ReportsPage />
+          path: '/reports/:patientId',
+          element: <ReportsPage {...authenticatorProps} />
         },
         {
           path: '/patients/:id',
@@ -60,7 +60,7 @@ function App () {
   )
 }
 
-function ProtectedRoute ({ user, children,  }) {
+function ProtectedRoute ({ user, children }) {
   console.log('User: ', user)
   const isDoctor = user?.attributes['custom:role'] === 'doctor'
   const userId = user?.username
