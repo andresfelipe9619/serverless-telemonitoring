@@ -1,88 +1,86 @@
 import React from 'react'
 import { Amplify, Auth } from 'aws-amplify'
 import { Authenticator } from '@aws-amplify/ui-react'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Pages from './pages'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
+import AppLayout from './pages/home/AppLayout'
 import SignUp from './pages/auth/SignUp'
 import ErrorPage from './pages/error/ErrorPage'
 import PatientDetail from './pages/patients/PatientDetail'
+import ReportsPage from './pages/reports/ReportsPage'
+import PatientsPage from './pages/patients/PatientsPage'
 import awsExports from './aws-exports'
-import './App.css'
+
 import '@aws-amplify/ui-react/styles.css'
+import './App.css'
 
 Amplify.configure(awsExports)
 
 const router = authenticatorProps =>
   createBrowserRouter([
     {
-      path: '/',
-      element: <Pages {...authenticatorProps} />,
-      errorElement: <ErrorPage />
-    },
-    {
-      path: '/patients/:id',
-      element: <PatientDetail {...authenticatorProps} />,
-      errorElement: <ErrorPage />
+      element: <AppLayout {...authenticatorProps} />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          path: '/',
+          element: (
+            <ProtectedRoute {...authenticatorProps}>
+              <PatientsPage />
+            </ProtectedRoute>
+          )
+        },
+        {
+          path: '/report',
+          element: <ReportsPage />
+        },
+        {
+          path: '/patients/:id',
+          element: <PatientDetail {...authenticatorProps} />
+        }
+      ]
     }
   ])
 
 function App () {
   return (
-    <Authenticator
-      components={{
-        SignUp
-      }}
-      services={{
-        handleSignUp,
-        validateCustomSignUp
-      }}
-    >
-      {authenticatorProps => (
-        <RouterProvider router={router(authenticatorProps)} />
-      )}
-    </Authenticator>
+    <div className='App'>
+      <Authenticator
+        components={{
+          SignUp: SignUp()
+        }}
+        services={{
+          handleSignUp
+        }}
+      >
+        {authenticatorProps => (
+          <RouterProvider router={router(authenticatorProps)} />
+        )}
+      </Authenticator>
+    </div>
   )
 }
 
+function ProtectedRoute ({ user, children,  }) {
+  console.log('User: ', user)
+  const isDoctor = user?.attributes['custom:role'] === 'doctor'
+  const userId = user?.username
+  if (!isDoctor) {
+    return <Navigate to={`/patients/${userId}`} replace />
+  }
+  return children
+}
+
 async function handleSignUp (formData) {
-  console.log('formData', formData)
+  console.log('FORM DATA: ', formData)
   let { username, password, attributes } = formData
-  // custom username
   username = username.toLowerCase()
   attributes.email = attributes.email.toLowerCase()
+  attributes['custom:role'] = attributes['custom:role'] || 'patient'
   return Auth.signUp({
     username,
     password,
     attributes
   })
-}
-
-async function validateCustomSignUp (formData) {
-  if (!formData.sex) {
-    return {
-      sex: 'Sexo es obligatorio'
-    }
-  }
-  if (!formData.weight) {
-    return {
-      weight: 'Peso es obligatorio'
-    }
-  }
-  if (!formData.name) {
-    return {
-      name: 'Nombre es obligatorio'
-    }
-  }
-  if (!formData.lastname) {
-    return {
-      lastname: 'Apellido es obligatorio'
-    }
-  }
-  if (!formData.birthday) {
-    return {
-      lastname: 'Apellido es obligatorio'
-    }
-  }
 }
 
 export default App
