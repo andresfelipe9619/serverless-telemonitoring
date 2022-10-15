@@ -22,7 +22,10 @@
           "GROUP": "Doctors",
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
           "s3Key": "amplify-builds/telemonitoringauthPostConfirmation-2f633231542f7746626e-build.zip"
-        }
+        },
+        "telemonitoringlambda": {},
+        "oximetrylambda": {},
+        "userslambda": {}
       },
       "storage": {
         "DatosOximetria": {

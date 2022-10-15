@@ -1,7 +1,7 @@
-import { Button, Card } from '@aws-amplify/ui-react'
+import { Button, Card, Heading } from '@aws-amplify/ui-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import Header from '../home/Header'
+
 
 export default function PatientsPage () {
   const navigate = useNavigate()
@@ -16,8 +16,8 @@ export default function PatientsPage () {
 
 function PatientCard ({ patient, go2 }) {
   return (
-    <Card>
-      <Header>Nombre Paciente</Header>
+    <Card variation='elevated'>
+      <Heading>Nombre Paciente</Heading>
       <Button onClick={go2(`/patients/${patient?.cognitoId}`)}>
         Telemonitoreo
       </Button>

@@ -1,10 +1,9 @@
 import React from 'react'
 import { Heading, Flex, Image, Card, Button } from '@aws-amplify/ui-react'
 import logo from '../../logo.svg'
-import Header from '../home/Header'
 import { useNavigate } from 'react-router-dom'
 
-export default function PatientDetail ({ user, signOut }) {
+export default function PatientDetail ({ user }) {
   const navigate = useNavigate()
   const go2 = path => () => navigate(path)
 
@@ -15,22 +14,22 @@ export default function PatientDetail ({ user, signOut }) {
       alignContent={'center'}
       className='App-header'
     >
-      <Card>
-        <Header>DATOS DEL PACIENTE</Header>
+      <Card variation='elevated'>
+        <Heading level={1}>DATOS DEL PACIENTE</Heading>
         <Image
           alt='Foto Paciente'
           src={logo}
           objectFit='initial'
           objectPosition='50% 50%'
           backgroundColor='initial'
-          height='75%'
-          width='75%'
+          height='30%'
+          width='30%'
           opacity='100%'
         />
         <Heading level={1}>Hello {user.username}</Heading>
       </Card>
-      <Card>
-        <Header>VISUALIZACIÓN DE LECTURA SIGNOS VITALES </Header>
+      <Card variation='elevated'>
+        <Heading level={1}>VISUALIZACIÓN DE LECTURA SIGNOS VITALES </Heading>
         <Button onClick={go2(`/reports/${user.username}`)}>Historial</Button>
       </Card>
     </Flex>
