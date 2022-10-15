@@ -1,0 +1,18 @@
+/* Style the header */
+.header {
+    padding: 10px 16px;
+    background: #eee;
+    position: fixed;
+    top: 0;
+    width: 100%
+  }
+  
+  /* Page content */
+  .content {
+    padding: 16px;
+  }
+  
+  /* Add some top padding to the page content to prevent sudden quick movement (as the header gets a new position at the top of the page (position:fixed and top:0) */
+  .sticky + .content {
+    padding-top: 102px;
+  }
