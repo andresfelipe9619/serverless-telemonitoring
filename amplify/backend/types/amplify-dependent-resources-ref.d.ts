@@ -21,6 +21,18 @@ export type AmplifyDependentResourcesAttributes = {
             "Arn": "string",
             "LambdaExecutionRole": "string",
             "Region": "string"
+        },
+        "telemonitoringlambda": {
+            "Name": "string",
+            "Arn": "string",
+            "Region": "string",
+            "LambdaExecutionRole": "string"
+        },
+        "oximetrylambda": {
+            "Name": "string",
+            "Arn": "string",
+            "Region": "string",
+            "LambdaExecutionRole": "string"
         }
     },
     "hosting": {
@@ -33,6 +45,13 @@ export type AmplifyDependentResourcesAttributes = {
             "CloudFrontDomainName": "string",
             "CloudFrontSecureURL": "string",
             "CloudFrontOriginAccessIdentity": "string"
+        }
+    },
+    "api": {
+        "TelemonitoringAPI": {
+            "RootUrl": "string",
+            "ApiName": "string",
+            "ApiId": "string"
         }
     }
 }

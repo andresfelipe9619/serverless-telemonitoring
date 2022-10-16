@@ -23,9 +23,14 @@
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
           "s3Key": "amplify-builds/telemonitoringauthPostConfirmation-2f633231542f7746626e-build.zip"
         },
-        "telemonitoringlambda": {},
-        "oximetrylambda": {},
-        "userslambda": {}
+        "telemonitoringlambda": {
+          "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
+          "s3Key": "amplify-builds/telemonitoringlambda-71524354716b35454354-build.zip"
+        },
+        "oximetrylambda": {
+          "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
+          "s3Key": "amplify-builds/oximetrylambda-736e695a32707a6f6532-build.zip"
+        }
       },
       "storage": {
         "DatosOximetria": {
@@ -43,18 +48,13 @@
           "streamArn": "arn:aws:dynamodb:us-east-1:710888295133:table/Datos_telemonitoreo/stream/2022-10-08T02:43:12.216",
           "partitionKeyName": "timestamp",
           "partitionKeyType": "S"
-        },
-        "Usuarios": {
-          "tableName": "Usuarios",
-          "region": "us-east-1",
-          "arn": "arn:aws:dynamodb:us-east-1:710888295133:table/Usuarios",
-          "streamArn": "arn:aws:dynamodb:us-east-1:710888295133:table/Usuarios/stream/2022-10-08T15:26:05.690",
-          "partitionKeyName": "email",
-          "partitionKeyType": "S"
         }
       },
       "hosting": {
         "S3AndCloudFront": {}
+      },
+      "api": {
+        "TelemonitoringAPI": {}
       }
     }
   }

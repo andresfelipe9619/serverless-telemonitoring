@@ -96,25 +96,6 @@
           }
         }
       ]
-    },
-    "userslambda": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "Usuarios",
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "attributeEnvMap": {
-            "Name": "TABLE_NAME",
-            "Arn": "TABLE_ARN"
-          }
-        }
-      ]
     }
   },
   "storage": {
@@ -125,12 +106,6 @@
       "dependsOn": []
     },
     "Datostelemonitoreo": {
-      "service": "DynamoDB",
-      "serviceType": "imported",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": []
-    },
-    "Usuarios": {
       "service": "DynamoDB",
       "serviceType": "imported",
       "providerPlugin": "awscloudformation",
@@ -180,14 +155,6 @@
         {
           "category": "function",
           "resourceName": "oximetrylambda",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "userslambda",
           "attributes": [
             "Name",
             "Arn"
