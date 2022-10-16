@@ -15,7 +15,7 @@ AWS.config.update({ region: process.env.TABLE_REGION })
 
 const dynamodb = new AWS.DynamoDB.DocumentClient()
 
-let tableName = ''
+let tableName = 'Usuarios'
 // if (process.env.ENV && process.env.ENV !== 'NONE') {
 //   tableName = tableName + '-' + process.env.ENV
 // }
