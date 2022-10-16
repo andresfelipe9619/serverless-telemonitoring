@@ -18,7 +18,9 @@ export default function ReportsPage () {
 
   return (
     <div>
-      {error && <Alert variation='error'>{error}</Alert>}
+      {error && (
+        <Alert variation='error'>{error?.message || 'Algo salió mal'}</Alert>
+      )}
       {showLoader && <Loader variation='linear' />}
       {haveData &&
         data.map((item, i) => (

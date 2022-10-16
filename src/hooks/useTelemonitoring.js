@@ -10,7 +10,7 @@ function useTelemonitoring () {
     async function getTelemonitoringData () {
       try {
         setLoading(true)
-        const response = await API.get('api', '/telemonitoring/timestamp')
+        const response = await API.get('TelemonitoringAPI', '/telemonitoring/timestamp')
         console.log('response', response)
         setData(response)
       } catch (error) {
