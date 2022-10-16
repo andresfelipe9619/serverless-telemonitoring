@@ -21,7 +21,7 @@
         "telemonitoringauthPostConfirmation": {
           "GROUP": "Doctors",
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
-          "s3Key": "amplify-builds/telemonitoringauthPostConfirmation-2f633231542f7746626e-build.zip"
+          "s3Key": "amplify-builds/telemonitoringauthPostConfirmation-2f354270757365356867-build.zip"
         },
         "telemonitoringlambda": {
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
@@ -29,9 +29,12 @@
         },
         "oximetrylambda": {
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
-          "s3Key": "amplify-builds/oximetrylambda-736e695a32707a6f6532-build.zip"
+          "s3Key": "amplify-builds/oximetrylambda-4257444336485a485062-build.zip"
         },
-        "userslambda": {}
+        "userslambda": {
+          "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
+          "s3Key": "amplify-builds/userslambda-51484355783132514a46-build.zip"
+        }
       },
       "storage": {
         "DatosOximetria": {
