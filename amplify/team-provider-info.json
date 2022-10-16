@@ -30,7 +30,8 @@
         "oximetrylambda": {
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
           "s3Key": "amplify-builds/oximetrylambda-736e695a32707a6f6532-build.zip"
-        }
+        },
+        "userslambda": {}
       },
       "storage": {
         "DatosOximetria": {
@@ -47,6 +48,13 @@
           "arn": "arn:aws:dynamodb:us-east-1:710888295133:table/Datos_telemonitoreo",
           "streamArn": "arn:aws:dynamodb:us-east-1:710888295133:table/Datos_telemonitoreo/stream/2022-10-08T02:43:12.216",
           "partitionKeyName": "timestamp",
+          "partitionKeyType": "S"
+        },
+        "Usuarios": {
+          "tableName": "Usuarios",
+          "region": "us-east-1",
+          "arn": "arn:aws:dynamodb:us-east-1:710888295133:table/Usuarios",
+          "partitionKeyName": "cognitoID",
           "partitionKeyType": "S"
         }
       },

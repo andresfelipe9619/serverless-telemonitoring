@@ -36,6 +36,26 @@
         },
         "setting": "private"
       }
+    },
+    "/users": {
+      "name": "/users",
+      "lambdaFunction": "userslambda",
+      "permissions": {
+        "groups": {
+          "Doctors": [
+            "create",
+            "read",
+            "update",
+            "delete"
+          ],
+          "Patients": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        "setting": "private"
+      }
     }
   }
 }
