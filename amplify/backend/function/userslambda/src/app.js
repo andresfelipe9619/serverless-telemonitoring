@@ -61,16 +61,9 @@ app.get(path + hashKeyPath, function (req, res) {
   const params = req.apiGateway.event.queryStringParameters
   console.log('params', params)
   const { role } = params
-  // const condition = {
-  //   custom_role: {
-  //     ComparisonOperator: 'EQ',
-  //     AttributeValueList: [role]
-  //   }
-  // }
-  // const projectionExpression = 'cognitoID, name, custom_role'
+
   const queryParams = {
     TableName: tableName,
-    // ProjectionExpression: projectionExpression,
     FilterExpression: '#rol = :rol',
     ExpressionAttributeNames: {
       '#rol': 'custom_role'
@@ -78,7 +71,6 @@ app.get(path + hashKeyPath, function (req, res) {
     ExpressionAttributeValues: {
       ':rol': role
     }
-    // KeyConditions: condition
   }
 
   dynamodb.scan(queryParams, (err, data) => {

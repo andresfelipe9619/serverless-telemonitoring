@@ -21,7 +21,7 @@ let tableName = 'Datos_telemonitoreo'
 // }
 
 const userIdPresent = false // TODO: update in case is required to use that definition
-const partitionKeyName = ''
+const partitionKeyName = 'timestamp'
 const partitionKeyType = ''
 const sortKeyName = ''
 const sortKeyType = ''
@@ -57,42 +57,25 @@ const convertUrlType = (param, type) => {
  * HTTP Get method for list objects *
  ********************************/
 
-app.get(path + hashKeyPath, function (req, res) {
-  const condition = {}
-  condition[partitionKeyName] = {
-    ComparisonOperator: 'EQ'
-  }
+ app.get(path + hashKeyPath, function (req, res) {
+  const params = req.apiGateway.event.queryStringParameters
+  console.log('params', params)
+  // const { role } = params
 
-  if (userIdPresent && req.apiGateway) {
-    condition[partitionKeyName]['AttributeValueList'] = [
-      req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH
-    ]
-  } else {
-    try {
-      condition[partitionKeyName]['AttributeValueList'] = [
-        convertUrlType(req.params[partitionKeyName], partitionKeyType)
-      ]
-    } catch (err) {
-      res.statusCode = 500
-      res.json({ error: 'Wrong column type ' + err })
-    }
-  }
-
-  let queryParams = {
+  const queryParams = {
     TableName: tableName,
-    KeyConditions: condition
   }
 
-  dynamodb.query(queryParams, (err, data) => {
+  dynamodb.scan(queryParams, (err, data) => {
     if (err) {
       res.statusCode = 500
       res.json({ error: 'Could not load items: ' + err })
     } else {
+      console.log('data', data)
       res.json(data.Items)
     }
   })
 })
-
 /*****************************************
  * HTTP Get method for get single object *
  *****************************************/
