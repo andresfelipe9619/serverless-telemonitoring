@@ -73,7 +73,7 @@ app.get(path + hashKeyPath, function (req, res) {
     }
   }
 
-  dynamodb.scan(queryParams, (err, data) => {
+  dynamodb.query(queryParams, (err, data) => {
     if (err) {
       res.statusCode = 500
       res.json({ error: 'Could not load items: ' + err })
