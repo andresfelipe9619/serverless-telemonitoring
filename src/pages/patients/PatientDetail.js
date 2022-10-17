@@ -1,12 +1,33 @@
-import React from 'react'
-import { Heading, Flex, Image, Card, Button } from '@aws-amplify/ui-react'
+import React, { useEffect } from 'react'
+import {
+  Heading,
+  Flex,
+  Image,
+  Card,
+  Button,
+  Loader
+} from '@aws-amplify/ui-react'
 import logo from '../../logo.svg'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
+import useProfileData from '../../hooks/useProfileData'
+import ErrorAlert from '../error/ErrorAlert'
 
-export default function PatientDetail ({ user }) {
+export default function PatientDetail () {
   const navigate = useNavigate()
+  const { patientId } = useParams()
+  const [
+    { data: patient, loading, error },
+    { getProfileData }
+  ] = useProfileData()
+
   const go2 = path => () => navigate(path)
 
+  useEffect(() => {
+    getProfileData(patientId)
+    // eslint-disable-next-line
+  }, [])
+
+  if (error) return <ErrorAlert error={error} />
   return (
     <Flex
       direction={'column'}
@@ -16,22 +37,33 @@ export default function PatientDetail ({ user }) {
     >
       <Card variation='elevated'>
         <Heading level={1}>DATOS DEL PACIENTE</Heading>
-        <Image
-          alt='Foto Paciente'
-          src={logo}
-          objectFit='initial'
-          objectPosition='50% 50%'
-          backgroundColor='initial'
-          height='30%'
-          width='30%'
-          opacity='100%'
-        />
-        <Heading level={1}>Hello {user.username}</Heading>
+        {loading && <Loader variation='linear' />}
+        <Content patient={patient} />
       </Card>
       <Card variation='elevated'>
-        <Heading level={1}>VISUALIZACIÓN DE LECTURA SIGNOS VITALES </Heading>
-        <Button onClick={go2(`/reports/${user.username}`)}>Historial</Button>
+        <Heading level={1}>VISUALIZACIÓN DE LECTURA SIGNOS VITALES</Heading>
+        <Button onClick={go2(`/reports/${patient.cognitoID}`)}>
+          Historial
+        </Button>
       </Card>
     </Flex>
+  )
+}
+
+function Content ({ patient }) {
+  return (
+    <div>
+      <Image
+        alt='Foto Paciente'
+        src={logo}
+        objectFit='initial'
+        objectPosition='50% 50%'
+        backgroundColor='initial'
+        height='30%'
+        width='30%'
+        opacity='100%'
+      />
+      <Heading level={1}>{patient.name}</Heading>
+    </div>
   )
 }

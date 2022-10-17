@@ -58,29 +58,27 @@ const convertUrlType = (param, type) => {
  ********************************/
 
 app.get(path + hashKeyPath, function (req, res) {
-  // const condition = {}
-  // condition[partitionKeyName] = {
-  //   ComparisonOperator: 'EQ'
-  // }
-
-  // if (userIdPresent && req.apiGateway) {
-  //   condition[partitionKeyName]['AttributeValueList'] = [req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH ];
-  // } else {
-  //   try {
-  //     condition[partitionKeyName]['AttributeValueList'] = [ convertUrlType(req.params[partitionKeyName], partitionKeyType) ];
-  //   } catch(err) {
-  //     res.statusCode = 500;
-  //     res.json({error: 'Wrong column type ' + err});
+  const params = req.apiGateway.event.queryStringParameters
+  console.log('params', params)
+  const { role } = params
+  // const condition = {
+  //   custom_role: {
+  //     ComparisonOperator: 'EQ',
+  //     AttributeValueList: [role]
   //   }
   // }
-
-  let queryParams = {
+  // const projectionExpression = 'cognitoID, name, custom_role'
+  const queryParams = {
     TableName: tableName,
-    FilterExpression: 'custom_role = :role',
-    // KeyConditions: condition
+    // ProjectionExpression: projectionExpression,
+    FilterExpression: '#rol = :rol',
+    ExpressionAttributeNames: {
+      '#rol': 'custom_role'
+    },
     ExpressionAttributeValues: {
-      ':role': { S: req.params.role }
+      ':rol': role
     }
+    // KeyConditions: condition
   }
 
   dynamodb.scan(queryParams, (err, data) => {
@@ -88,6 +86,7 @@ app.get(path + hashKeyPath, function (req, res) {
       res.statusCode = 500
       res.json({ error: 'Could not load items: ' + err })
     } else {
+      console.log('data', data)
       res.json(data.Items)
     }
   })
