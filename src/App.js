@@ -11,7 +11,6 @@ import PatientsPage from './pages/patients/PatientsPage'
 import awsExports from './aws-exports'
 
 import '@aws-amplify/ui-react/styles.css'
-import './App.css'
 
 Amplify.configure(awsExports)
 

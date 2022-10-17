@@ -1,4 +1,4 @@
-import { Alert, Button, Card, Heading, Loader } from '@aws-amplify/ui-react'
+import { Button, Card, Flex, Heading, Loader } from '@aws-amplify/ui-react'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import usePatients from '../../hooks/usePatients'
@@ -19,8 +19,10 @@ export default function PatientsPage () {
     <div>
       <ErrorAlert error={error} />
       {showLoader && <Loader variation='linear' />}
-      {!loading &&
-        data.map(patient => <PatientCard patient={patient} go2={go2} />)}
+      <Flex>
+        {!loading &&
+          data.map(patient => <PatientCard patient={patient} go2={go2} />)}
+      </Flex>
     </div>
   )
 }
@@ -28,9 +30,9 @@ export default function PatientsPage () {
 function PatientCard ({ patient, go2 }) {
   if (!patient) return null
   return (
-    <Card variation='elevated'>
+    <Card variation='elevated' className='patient-card col-3'>
       <Heading>{patient.name}</Heading>
-      <Button onClick={go2(`/patients/${patient?.cognitoId}`)}>
+      <Button onClick={go2(`/patients/${patient?.cognitoID}`)}>
         Telemonitoreo
       </Button>
     </Card>
