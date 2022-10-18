@@ -57,13 +57,22 @@ const convertUrlType = (param, type) => {
  * HTTP Get method for list objects *
  ********************************/
 
- app.get(path + hashKeyPath, function (req, res) {
+app.get(path + hashKeyPath, function (req, res) {
   const params = req.apiGateway.event.queryStringParameters
   console.log('params', params)
-  // const { role } = params
-
+  const { size = 20 } = params
+  const today = new Date().toString()
+  console.log('today', today)
   const queryParams = {
     TableName: tableName,
+    PageSize: size,
+    KeyConditionExpression: 'begins_with(#time, :time)',
+    ExpressionAttributeNames: {
+      '#time': 'timestamp'
+    },
+    ExpressionAttributeValues: {
+      ':time': today
+    }
   }
 
   dynamodb.query(queryParams, (err, data) => {

@@ -25,15 +25,15 @@
         },
         "telemonitoringlambda": {
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
-          "s3Key": "amplify-builds/telemonitoringlambda-7a5a784a4c6739794e42-build.zip"
+          "s3Key": "amplify-builds/telemonitoringlambda-51565337744a4d613168-build.zip"
         },
         "oximetrylambda": {
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
-          "s3Key": "amplify-builds/oximetrylambda-48395967475069344d45-build.zip"
+          "s3Key": "amplify-builds/oximetrylambda-525373485855486d3762-build.zip"
         },
         "userslambda": {
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
-          "s3Key": "amplify-builds/userslambda-30442f45536456337747-build.zip"
+          "s3Key": "amplify-builds/userslambda-6942744d74615a4c7270-build.zip"
         }
       },
       "storage": {
