@@ -3,7 +3,6 @@ import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 
 export default function Geolocation () {
   const [coords, setCoords] = useState([])
-  const [latitude, longitude] = coords
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(position => {
@@ -14,7 +13,6 @@ export default function Geolocation () {
     })
   }, [])
 
-  if (isNaN(latitude) || isNaN(longitude)) return null
   return (
     <MapContainer center={coords} zoom={13} scrollWheelZoom={false}>
     <TileLayer

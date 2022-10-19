@@ -97,26 +97,30 @@ const Chart = ({ data }) => (
   />
 )
 
+const defaultChartData = [
+  {
+    id: 'HeartBeat',
+    color: 'hsl(16, 70%, 50%)',
+    data: []
+  },
+  {
+    id: 'Spo2',
+    color: 'hsl(101, 70%, 50%)',
+    data: []
+  }
+]
+
 function buildChartData (data) {
-  return data.reduce(
-    (chartData, item) => {
-      let [HeartBeat, SPO2] = chartData
-      let x = item.timestamp
-      SPO2.data.push({ x, y: item.Spo2 })
-      HeartBeat.data.push({ x, y: item.HeartBeat })
-      return chartData
-    },
-    [
-      {
-        id: 'HeartBeat',
-        color: 'hsl(16, 70%, 50%)',
-        data: []
-      },
-      {
-        id: 'Spo2',
-        color: 'hsl(101, 70%, 50%)',
-        data: []
-      }
+  const result = data.reduce((chartData, item) => {
+    let [HeartBeat, SPO2] = chartData
+    let options = { year: 'numeric', month: 'numeric', day: 'numeric' }
+    let x = new Date(item.timestamp).toLocaleString('en-US', options)
+
+    return [
+      { ...HeartBeat, data: [...HeartBeat.data, { x, y: item.HeartBeat }] },
+      { ...SPO2, data: [...SPO2.data, { x, y: item.Spo2 }] }
     ]
-  )
+  }, defaultChartData)
+  console.log('CHART DATA', result)
+  return result
 }
