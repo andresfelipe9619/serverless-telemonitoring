@@ -72,7 +72,7 @@ function Content ({ patient, handleAssignDevice }) {
   return (
     <View>
       <Flex>
-        <Table caption='' highlightOnHover={false} maxWidth={420}>
+        <Table caption='' highlightOnHover={false} maxWidth={620}>
           <TableBody>
             <TableRow>
               <TableCell>N Documento</TableCell>

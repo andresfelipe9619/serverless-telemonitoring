@@ -1,7 +1,15 @@
-import { Heading, Loader } from '@aws-amplify/ui-react'
+import {
+  Button,
+  Flex,
+  Heading,
+  Loader,
+  TextField,
+  View
+} from '@aws-amplify/ui-react'
 import React, { useEffect } from 'react'
 import useTelemonitoring from '../../hooks/useTelemonitoring'
 import ErrorAlert from '../error/ErrorAlert'
+import Chart from './Chart'
 
 export default function ReportsPage () {
   const [
@@ -18,15 +26,24 @@ export default function ReportsPage () {
   const showLoader = !haveData && loading
 
   return (
-    <div>
+    <View>
       <ErrorAlert error={error} />
+      <Flex>
+        <TextField
+          type='date'
+          descriptiveText='Fecha y Hora Inicio'
+          label='Fecha y Hora Inicio'
+        />
+        <TextField
+          type='date'
+          descriptiveText='Fecha y Hora Fin'
+          label='Fecha y Hora Fin'
+        />
+      </Flex>
+      <Button>Analizar</Button>
+      <Heading>INFORME CONSOLIDADO DE TELEMONITOREO DE SIGNOS VITALES</Heading>
       {showLoader && <Loader variation='linear' />}
-      {haveData &&
-        data.map((item, i) => (
-          <Heading level={2}>
-            {i} - {item.device_id}; HB: {item.HeartBeat}; SPO2: {item.Spo2}
-          </Heading>
-        ))}
-    </div>
+      {haveData && <Chart data={data} />}
+    </View>
   )
 }
