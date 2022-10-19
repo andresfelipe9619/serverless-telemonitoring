@@ -25,7 +25,7 @@
         },
         "telemonitoringlambda": {
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
-          "s3Key": "amplify-builds/telemonitoringlambda-51565337744a4d613168-build.zip"
+          "s3Key": "amplify-builds/telemonitoringlambda-45486a766b46634c5945-build.zip"
         },
         "oximetrylambda": {
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
@@ -33,7 +33,7 @@
         },
         "userslambda": {
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
-          "s3Key": "amplify-builds/userslambda-6942744d74615a4c7270-build.zip"
+          "s3Key": "amplify-builds/userslambda-30442f45536456337747-build.zip"
         }
       },
       "storage": {
@@ -70,3 +70,5 @@
     }
   }
 }
+
+{"DatosOximetria":"Datos_Oximetria","Datostelemonitoreo":"Datos_telemonitoreo","Usuarios":"Usuarios"}

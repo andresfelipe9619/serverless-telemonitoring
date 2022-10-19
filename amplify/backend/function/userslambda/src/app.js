@@ -64,7 +64,7 @@ app.get(path + hashKeyPath, function (req, res) {
 
   const queryParams = {
     TableName: tableName,
-    KeyConditionExpression: '#rol = :rol',
+    FilterExpression: '#rol = :rol',
     ExpressionAttributeNames: {
       '#rol': 'custom_role'
     },

@@ -58,24 +58,36 @@ const convertUrlType = (param, type) => {
  ********************************/
 
 app.get(path + hashKeyPath, function (req, res) {
-  const params = req.apiGateway.event.queryStringParameters
+  const params = req?.apiGateway?.event?.queryStringParameters || {}
   console.log('params', params)
-  const { size = 20 } = params
+  const { size } = params
   const today = new Date().toString()
   console.log('today', today)
+  // const queryParams = {
+  //   TableName: tableName,
+  //   ...(size ? { PageSize: size } : {}),
+  //   KeyConditionExpression: 'begins_with(#time, :time)',
+  //   ExpressionAttributeNames: {
+  //     '#time': 'timestamp'
+  //   },
+  //   ExpressionAttributeValues: {
+  //     ':time': today
+  //   }
+  // }
   const queryParams = {
     TableName: tableName,
-    PageSize: size,
-    KeyConditionExpression: 'begins_with(#time, :time)',
-    ExpressionAttributeNames: {
-      '#time': 'timestamp'
-    },
-    ExpressionAttributeValues: {
-      ':time': today
-    }
+    ConsistentRead: true,
+    ...(size ? { Limit: size } : {}),
+    // FilterExpression: '#time = :time',
+    // ExpressionAttributeNames: {
+    //   '#time': 'custom_role'
+    // },
+    // ExpressionAttributeValues: {
+    //   ':time': today
+    // }
   }
 
-  dynamodb.query(queryParams, (err, data) => {
+  dynamodb.scan(queryParams, (err, data) => {
     if (err) {
       res.statusCode = 500
       res.json({ error: 'Could not load items: ' + err })
