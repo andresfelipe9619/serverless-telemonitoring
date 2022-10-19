@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { API } from 'aws-amplify'
 
-function usePatients () {
+function usePatientDatas () {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
@@ -32,4 +32,4 @@ function usePatients () {
   return [{ data, loading, error }, { getPatients }]
 }
 
-export default usePatients
+export default usePatientDatas

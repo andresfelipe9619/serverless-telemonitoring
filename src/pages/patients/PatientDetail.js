@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Heading,
   Flex,
@@ -15,7 +15,7 @@ import {
 } from '@aws-amplify/ui-react'
 import logo from '../../logo.svg'
 import { useNavigate, useParams } from 'react-router-dom'
-import useProfileData from '../../hooks/useProfileData'
+import usePatientData from '../../hooks/usePatientData'
 import ErrorAlert from '../error/ErrorAlert'
 import TelemonitoringPreview from './TelemonitoringPreview'
 import Geolocation from './Geolocation'
@@ -27,15 +27,17 @@ export default function PatientDetail () {
 
   const [
     { data, loading, error },
-    { getProfileData }
-  ] = useProfileData()
+    { getPatientData, assignDevice }
+  ] = usePatientData()
 
   const go2 = path => () => navigate(path)
+
+  const handleAssignDevice = device => () => assignDevice(data, device)
 
   useEffect(() => {
     console.log('Patient ID', id)
     if (!id) return null
-    getProfileData(id)
+    getPatientData(id)
     // eslint-disable-next-line
   }, [id])
 
@@ -51,10 +53,10 @@ export default function PatientDetail () {
       <Card variation='elevated'>
         <Heading level={1}>DATOS DEL PACIENTE</Heading>
         {loading && <Loader variation='linear' />}
-        {!id && (
-          <Heading>No hay paciente con el ID especificado: {id}</Heading>
+        {!id && <Heading>No hay paciente con el ID especificado: {id}</Heading>}
+        {data && (
+          <Content patient={data} handleAssignDevice={handleAssignDevice} />
         )}
-        <Content patient={data} />
       </Card>
       <Card variation='elevated'>
         <Heading level={1}>VISUALIZACIÓN DE LECTURA SIGNOS VITALES</Heading>
@@ -65,12 +67,12 @@ export default function PatientDetail () {
   )
 }
 
-function Content ({ patient }) {
-  if (!patient) return null
+function Content ({ patient, handleAssignDevice }) {
+  const [device, setDevice] = useState(null)
   return (
     <View>
       <Flex>
-        <Table caption='' highlightOnHover={false}>
+        <Table caption='' highlightOnHover={false} maxWidth={420}>
           <TableBody>
             <TableRow>
               <TableCell>N Documento</TableCell>
@@ -119,16 +121,28 @@ function Content ({ patient }) {
       </Flex>
       <Flex>
         <Heading>Dispositivo IoT</Heading>
-        <SelectField name='device' placeholder='Dispositivo'>
+        <SelectField
+          name='device'
+          placeholder='Dispositivo'
+          value={device}
+          onChange={e => setDevice(e.target.value)}
+        >
           <option value='1'>Dispositivo 1</option>
           <option value='2'>Dispositivo 2</option>
           <option value='3'>Dispositivo 3</option>
         </SelectField>
-        <Button>Asignar</Button>
-        <Button>Liberar</Button>
+        <Button
+          disabled={device === patient.device_id}
+          onClick={handleAssignDevice(device)}
+        >
+          Asignar
+        </Button>
+        <Button disabed={!device} onClick={handleAssignDevice('')}>
+          Liberar
+        </Button>
       </Flex>
-      <View height='200px' width='60%'>
-        <Heading>Ubicación geográfica</Heading>
+      <Heading>Ubicación geográfica</Heading>
+      <View height={200} width={420}>
         <Geolocation />
       </View>
     </View>

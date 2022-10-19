@@ -1,12 +1,12 @@
 import { Button, Card, Flex, Heading, Loader } from '@aws-amplify/ui-react'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import usePatients from '../../hooks/usePatients'
+import usePatientDatas from '../../hooks/usePatients'
 import ErrorAlert from '../error/ErrorAlert'
 
 export default function PatientsPage () {
   const navigate = useNavigate()
-  const [{ data, loading, error }, { getPatients }] = usePatients()
+  const [{ data, loading, error }, { getPatients }] = usePatientDatas()
   const go2 = path => () => navigate(path)
 
   useEffect(() => {
