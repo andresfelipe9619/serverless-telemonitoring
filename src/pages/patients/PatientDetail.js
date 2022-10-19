@@ -22,20 +22,25 @@ import Geolocation from './Geolocation'
 
 export default function PatientDetail () {
   const navigate = useNavigate()
-  const { patientId } = useParams()
+  const params = useParams()
+  const { id } = params
+
   const [
-    { data: patient, loading, error },
+    { data, loading, error },
     { getProfileData }
   ] = useProfileData()
 
   const go2 = path => () => navigate(path)
 
   useEffect(() => {
-    getProfileData(patientId)
+    console.log('Patient ID', id)
+    if (!id) return null
+    getProfileData(id)
     // eslint-disable-next-line
-  }, [])
+  }, [id])
 
   if (error) return <ErrorAlert error={error} />
+
   return (
     <Flex
       direction={'column'}
@@ -46,23 +51,25 @@ export default function PatientDetail () {
       <Card variation='elevated'>
         <Heading level={1}>DATOS DEL PACIENTE</Heading>
         {loading && <Loader variation='linear' />}
-        <Content patient={patient} />
+        {!id && (
+          <Heading>No hay paciente con el ID especificado: {id}</Heading>
+        )}
+        <Content patient={data} />
       </Card>
       <Card variation='elevated'>
         <Heading level={1}>VISUALIZACIÓN DE LECTURA SIGNOS VITALES</Heading>
         <TelemonitoringPreview />
-        <Button onClick={go2(`/reports/${patient.cognitoID}`)}>
-          Historial
-        </Button>
+        <Button onClick={go2(`/reports/${id}`)}>Historial</Button>
       </Card>
     </Flex>
   )
 }
 
 function Content ({ patient }) {
+  if (!patient) return null
   return (
-    <Flex>
-      <View>
+    <View>
+      <Flex>
         <Table caption='' highlightOnHover={false}>
           <TableBody>
             <TableRow>
@@ -109,19 +116,21 @@ function Content ({ patient }) {
           width='30%'
           opacity='100%'
         />
-      </View>
-      <View>
+      </Flex>
+      <Flex>
         <Heading>Dispositivo IoT</Heading>
         <SelectField name='device' placeholder='Dispositivo'>
           <option value='1'>Dispositivo 1</option>
           <option value='2'>Dispositivo 2</option>
           <option value='3'>Dispositivo 3</option>
         </SelectField>
-      </View>
-      <View>
+        <Button>Asignar</Button>
+        <Button>Liberar</Button>
+      </Flex>
+      <View height='200px' width='60%'>
         <Heading>Ubicación geográfica</Heading>
         <Geolocation />
       </View>
-    </Flex>
+    </View>
   )
 }

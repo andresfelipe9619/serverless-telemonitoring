@@ -6,20 +6,15 @@ export default function useProfileData () {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const getProfileData = useCallback(async function getProfileData ({ user }) {
+  const getProfileData = useCallback(async function getProfileData (cognitoID) {
     try {
       setLoading(true)
-      const options = {
-        queryStringParameters: {
-          cognitoID: user.username
-        }
-      }
+      console.log('cognitoID', cognitoID)
       const response = await API.get(
         'TelemonitoringAPI',
-        '/users/cognitoID',
-        options
+        `/users/object/${cognitoID}`
       )
-      console.log('response', response)
+      console.log('Profile Data: ', response)
       setData(response)
     } catch (error) {
       console.error(error)

@@ -1,6 +1,7 @@
-import { Alert, Heading, Loader } from '@aws-amplify/ui-react'
+import { Heading, Loader } from '@aws-amplify/ui-react'
 import React, { useEffect } from 'react'
 import useTelemonitoring from '../../hooks/useTelemonitoring'
+import ErrorAlert from '../error/ErrorAlert'
 
 export default function ReportsPage () {
   const [
@@ -18,9 +19,7 @@ export default function ReportsPage () {
 
   return (
     <div>
-      {error && (
-        <Alert variation='error'>{error?.message || 'Algo salió mal'}</Alert>
-      )}
+      <ErrorAlert error={error} />
       {showLoader && <Loader variation='linear' />}
       {haveData &&
         data.map((item, i) => (
