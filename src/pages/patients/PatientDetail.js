@@ -59,7 +59,9 @@ export default function PatientDetail () {
           VISUALIZACIÓN DE LECTURA SIGNOS VITALES
         </Heading>
         <TelemonitoringPreview />
-        <Button onClick={go2(`/reports/${id}`)}>Historial</Button>
+        <Flex justifyContent='center' marginTop={32}>
+          <Button onClick={go2(`/reports/${id}`)}>Historial</Button>
+        </Flex>
       </Card>
     </Flex>
   )
@@ -67,9 +69,15 @@ export default function PatientDetail () {
 
 function Content ({ patient, handleAssignDevice }) {
   const [device, setDevice] = useState(null)
+
+  useEffect(() => {
+    if (!patient.device_id) return
+    setDevice(patient.device_id)
+  }, [patient])
+
   return (
     <View>
-      <Flex>
+      <Flex marginBottom={32}>
         <Table
           caption=''
           variation='striped'
@@ -122,30 +130,32 @@ function Content ({ patient, handleAssignDevice }) {
           opacity='100%'
         />
       </Flex>
-      <Flex>
+      <Flex marginBottom={32} direction='column'>
         <Heading>Dispositivo IoT</Heading>
-        <SelectField
-          name='device'
-          placeholder='Dispositivo'
-          value={device}
-          onChange={e => setDevice(e.target.value)}
-        >
-          <option value='1'>Dispositivo 1</option>
-          <option value='2'>Dispositivo 2</option>
-          <option value='3'>Dispositivo 3</option>
-        </SelectField>
-        <Button
-          disabled={device === patient.device_id}
-          onClick={handleAssignDevice(device)}
-        >
-          Asignar
-        </Button>
-        <Button disabed={!device} onClick={handleAssignDevice('')}>
-          Liberar
-        </Button>
+        <Flex margin={[8, 16]}>
+          <SelectField
+            name='device'
+            placeholder='Dispositivo'
+            value={device}
+            onChange={e => setDevice(e.target.value)}
+          >
+            <option value='1'>Dispositivo 1</option>
+            <option value='2'>Dispositivo 2</option>
+            <option value='3'>Dispositivo 3</option>
+          </SelectField>
+          <Button
+            disabled={device === patient.device_id}
+            onClick={handleAssignDevice(device)}
+          >
+            Asignar
+          </Button>
+          <Button disabed={!device} onClick={handleAssignDevice('')}>
+            Liberar
+          </Button>
+        </Flex>
       </Flex>
-      <Flex>
-        <Heading>Ubicación geográfica</Heading>
+      <Flex direction={'column'}>
+        <Heading>Ubicación Geográfica</Heading>
         <Geolocation />
       </Flex>
     </View>

@@ -1,6 +1,6 @@
 /* Style the header */
 .header {
-    z-index: 1;
+    z-index: 10000;
     padding: 10px 16px;
     background-color: var(--amplify-colors-brand-primary-20);
     position: fixed;
