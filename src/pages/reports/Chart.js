@@ -8,26 +8,28 @@ import { ResponsiveLine } from '@nivo/line'
 const Chart = ({ data }) => (
   <ResponsiveLine
     data={buildChartData(data)}
-    margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
-    xScale={{ type: 'point' }}
+    margin={{ top: 50, right: 110, bottom: 120, left: 60 }}
+    // xScale={{
+    //   type: 'time',
+    //   format: '%Y-%m-%d %H:%M:%S',
+    //   useUTC: false,
+    //   precision: 'second'
+    // }}
+    // xFormat='time:%Y-%m-%d %H:%M:%S'
     yScale={{
       type: 'linear',
-      min: 'auto',
-      max: 'auto',
-      stacked: true,
-      reverse: false
+      stacked: false
     }}
-    yFormat=' >-.2f'
+    colors={{ scheme: 'category10' }}
+    xFormat={formatTimestamp}
     axisTop={null}
     axisRight={null}
     axisBottom={{
-      orient: 'bottom',
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 0,
-      legend: 'transportation',
-      legendOffset: 36,
-      legendPosition: 'middle'
+      tickRotation: 90,
+      format: formatTimestamp,
+      tickValues: 5,
+      legend: 'Time scale',
+      legendOffset: -12
     }}
     axisLeft={{
       orient: 'left',
@@ -43,6 +45,7 @@ const Chart = ({ data }) => (
     pointBorderWidth={2}
     pointBorderColor={{ from: 'serieColor' }}
     pointLabelYOffset={-12}
+    enableSlices={false}
     useMesh={true}
     legends={[
       {
@@ -73,30 +76,48 @@ const Chart = ({ data }) => (
   />
 )
 
+function formatTimestamp (timestamp) {
+  const options = {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric'
+  }
+  return new Date(timestamp).toLocaleString('en-US', options)
+}
+
 const defaultChartData = [
   {
-    id: 'HeartBeat',
-    color: 'hsl(16, 70%, 50%)',
+    id: 'Spo2',
     data: []
   },
   {
-    id: 'Spo2',
-    color: 'hsl(101, 70%, 50%)',
+    id: 'HeartBeat',
     data: []
   }
 ]
 
 function buildChartData (data) {
-  const result = data.reduce((chartData, item) => {
-    let [HeartBeat, SPO2] = chartData
-    let options = { year: 'numeric', month: 'numeric', day: 'numeric' }
-    let x = new Date(item.timestamp).toLocaleString('en-US', options)
-
-    return [
-      { ...HeartBeat, data: [...HeartBeat.data, { x, y: item.HeartBeat }] },
-      { ...SPO2, data: [...SPO2.data, { x, y: item.Spo2 }] }
-    ]
-  }, defaultChartData)
+  const result = data
+    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+    .reduce((chartData, item) => {
+      let [HeartBeat, SPO2] = chartData
+      if (!item.timestamp) return chartData
+      let [x] = item.timestamp.split('.')
+      if (!x || isNaN(item.HeartBeat) || isNaN(item.Spo2)) return chartData
+      if (item.HeartBeat < 0 || item.Spo2 < 0) return chartData
+      return [
+        {
+          ...HeartBeat,
+          data: [...HeartBeat.data, { x, y: item.HeartBeat }]
+        },
+        {
+          ...SPO2,
+          data: [...SPO2.data, { x, y: item.Spo2 }]
+        }
+      ]
+    }, defaultChartData)
   console.log('CHART DATA', result)
   return result
 }

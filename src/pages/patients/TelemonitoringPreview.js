@@ -16,7 +16,7 @@ export default function TelemonitoringPreview () {
   }, [])
 
   return (
-    <View height='20vh'>
+    <View height='60vh'>
       {loading && <Loader variation='linear' />}
       <ErrorAlert error={error} />
       {!!data.length && <Chart data={data} />}

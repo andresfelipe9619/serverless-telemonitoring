@@ -1,7 +1,8 @@
 /* Style the header */
 .header {
+    z-index: 1;
     padding: 10px 16px;
-    background: #eee;
+    background-color: var(--amplify-colors-brand-primary-20);
     position: fixed;
     top: 0;
     width: 100%
@@ -9,7 +10,7 @@
   
   /* Page content */
   .content {
-    padding: 16px;
+    padding: 0px 24px;
   }
   
   /* Add some top padding to the page content to prevent sudden quick movement (as the header gets a new position at the top of the page (position:fixed and top:0) */

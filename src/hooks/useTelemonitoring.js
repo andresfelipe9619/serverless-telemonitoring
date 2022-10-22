@@ -7,12 +7,12 @@ function useTelemonitoring () {
   const [error, setError] = useState(null)
 
   const getTelemonitoringData = useCallback(
-    async function getTelemonitoringData () {
+    async function getTelemonitoringData ({ size = 40 } = {}) {
       try {
         setLoading(true)
         const options = {
           queryStringParameters: {
-            size: 100
+            size
           }
         }
         const response = await API.get(

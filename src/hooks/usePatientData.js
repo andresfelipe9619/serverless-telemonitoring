@@ -46,5 +46,8 @@ export default function usePatientData () {
   },
   [])
 
-  return [{ data, loading, error, assignDevice }, { getPatientData }]
+  return [
+    { data, loading, error },
+    { getPatientData, assignDevice }
+  ]
 }

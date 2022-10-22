@@ -35,7 +35,6 @@ export default function PatientDetail () {
   const handleAssignDevice = device => () => assignDevice(data, device)
 
   useEffect(() => {
-    console.log('Patient ID', id)
     if (!id) return null
     getPatientData(id)
     // eslint-disable-next-line
@@ -44,14 +43,11 @@ export default function PatientDetail () {
   if (error) return <ErrorAlert error={error} />
 
   return (
-    <Flex
-      direction={'column'}
-      justifyContent='center'
-      alignContent={'center'}
-      className='App-header'
-    >
+    <Flex direction={'column'} alignContent={'center'}>
       <Card variation='elevated'>
-        <Heading level={1}>DATOS DEL PACIENTE</Heading>
+        <Heading level={2} margin={16} textAlign='center'>
+          DATOS DEL PACIENTE
+        </Heading>
         {loading && <Loader variation='linear' />}
         {!id && <Heading>No hay paciente con el ID especificado: {id}</Heading>}
         {data && (
@@ -59,7 +55,9 @@ export default function PatientDetail () {
         )}
       </Card>
       <Card variation='elevated'>
-        <Heading level={1}>VISUALIZACIÓN DE LECTURA SIGNOS VITALES</Heading>
+        <Heading level={2} margin={16} textAlign='center'>
+          VISUALIZACIÓN DE LECTURA SIGNOS VITALES
+        </Heading>
         <TelemonitoringPreview />
         <Button onClick={go2(`/reports/${id}`)}>Historial</Button>
       </Card>
@@ -72,7 +70,12 @@ function Content ({ patient, handleAssignDevice }) {
   return (
     <View>
       <Flex>
-        <Table caption='' highlightOnHover={false} maxWidth={620}>
+        <Table
+          caption=''
+          variation='striped'
+          highlightOnHover={false}
+          maxWidth={620}
+        >
           <TableBody>
             <TableRow>
               <TableCell>N Documento</TableCell>
@@ -141,10 +144,10 @@ function Content ({ patient, handleAssignDevice }) {
           Liberar
         </Button>
       </Flex>
-      <Heading>Ubicación geográfica</Heading>
-      <View height={200} width={420}>
+      <Flex>
+        <Heading>Ubicación geográfica</Heading>
         <Geolocation />
-      </View>
+      </Flex>
     </View>
   )
 }

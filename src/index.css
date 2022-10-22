@@ -13,8 +13,13 @@ code {
 }
 
 .App {
-  padding-top: 12vh;
-  text-align: center;
+  padding: 96px 0px;
+  background-color: var(--amplify-colors-brand-primary-10);
+  min-height: 100vh;
+}
+
+.amplify-card {
+  box-shadow: var(--amplify-shadows-large)
 }
 
 /* RESPONSIVE DESIGN */

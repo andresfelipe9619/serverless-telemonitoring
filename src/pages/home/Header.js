@@ -1,4 +1,4 @@
-import { Button, Flex } from '@aws-amplify/ui-react'
+import { Button, Flex, View } from '@aws-amplify/ui-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -9,11 +9,11 @@ export default function Header (props) {
   const go2 = path => () => navigate(path)
 
   return (
-    <div className='header'>
+    <View className='header'>
       <Flex>
         <Button onClick={go2('/')}>Inicio</Button>
         <Button onClick={props.signOut}>Cerrar Sesión</Button>
       </Flex>
-    </div>
+    </View>
   )
 }

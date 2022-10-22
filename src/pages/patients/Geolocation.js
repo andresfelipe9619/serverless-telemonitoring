@@ -1,3 +1,5 @@
+import { View } from '@aws-amplify/ui-react'
+import 'leaflet'
 import { useEffect, useState } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 
@@ -15,14 +17,16 @@ export default function Geolocation () {
 
   if (!coords.length) return null
   return (
-    <MapContainer center={coords} zoom={13} scrollWheelZoom={false}>
-      <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-      />
-      <Marker position={coords}>
-        <Popup>A pretty CSS3 popup.</Popup>
-      </Marker>
-    </MapContainer>
+    <View height={200} width={420}>
+      <MapContainer center={coords} zoom={13} scrollWheelZoom={false}>
+        <TileLayer
+          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        />
+        <Marker position={coords}>
+          <Popup>A pretty CSS3 popup.</Popup>
+        </Marker>
+      </MapContainer>
+    </View>
   )
 }
