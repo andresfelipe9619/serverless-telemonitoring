@@ -22,9 +22,11 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+# project specific
 new_user_credentials.csv
+*.numbers
 
-#amplify-do-not-edit-begin
+# amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
 amplify/logs
