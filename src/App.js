@@ -9,6 +9,7 @@ import PatientDetail from './pages/patients/PatientDetail'
 import ReportsPage from './pages/reports/ReportsPage'
 import PatientsPage from './pages/patients/PatientsPage'
 import awsExports from './aws-exports'
+import ProfilePage from './pages/auth/Profile'
 
 import '@aws-amplify/ui-react/styles.css'
 
@@ -23,18 +24,30 @@ const router = authenticatorProps =>
         {
           path: '/',
           element: (
-            <ProtectedRoute {...authenticatorProps}>
+            <ProtectedRoute doctoronly {...authenticatorProps}>
               <PatientsPage {...authenticatorProps} />
             </ProtectedRoute>
           )
         },
         {
+          path: '/profile',
+          element: <ProfilePage {...authenticatorProps} />
+        },
+        {
           path: '/reports/:patientId',
-          element: <ReportsPage {...authenticatorProps} />
+          element: (
+            <ProtectedRoute {...authenticatorProps}>
+              <ReportsPage {...authenticatorProps} />
+            </ProtectedRoute>
+          )
         },
         {
           path: '/patients/:id',
-          element: <PatientDetail {...authenticatorProps} />
+          element: (
+            <ProtectedRoute {...authenticatorProps}>
+              <PatientDetail {...authenticatorProps} />
+            </ProtectedRoute>
+          )
         }
       ]
     }
@@ -59,11 +72,16 @@ function App () {
   )
 }
 
-function ProtectedRoute ({ user, children }) {
+function ProtectedRoute ({ user, doctoronly, children }) {
   console.log('User: ', user)
   const isDoctor = user?.attributes['custom:role'] === 'doctor'
   const userId = user?.username
-  if (!isDoctor) {
+  const completed = +localStorage.getItem('profile-completed') || 0 // 1
+  console.log('completed', completed)
+  if (!completed) {
+    return <Navigate to={`/profile`} replace />
+  }
+  if (doctoronly && !isDoctor) {
     return <Navigate to={`/patients/${userId}`} replace />
   }
   return children
@@ -75,11 +93,13 @@ async function handleSignUp (formData) {
   username = username.toLowerCase()
   attributes.email = attributes.email.toLowerCase()
   attributes['custom:role'] = attributes['custom:role'] || 'patient'
-  return Auth.signUp({
+  const result = await Auth.signUp({
     username,
     password,
     attributes
   })
+  localStorage.setItem('profile-completed', '0')
+  return result
 }
 
 export default App
