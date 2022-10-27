@@ -4,18 +4,22 @@ import {
   Card,
   Flex,
   Heading,
+  Loader,
   SelectField,
   TextField
 } from '@aws-amplify/ui-react'
 import useDoctors from '../../hooks/useDoctors'
 import { useFormik } from 'formik'
-import usePatientData from '../../hooks/usePatientData'
 import { validationSchema, initialValues } from './settings'
+import useUserProfile from '../../hooks/useUserProfile'
+import ErrorAlert from '../error/ErrorAlert'
+import { useNavigate } from 'react-router-dom'
 
 const Input = ({
   name,
   placeholder,
   values,
+  isSubmitting,
   type = 'text',
   handleChange,
   errors
@@ -24,6 +28,7 @@ const Input = ({
     required
     type={type}
     name={name}
+    disabled={isSubmitting}
     value={values[name] || ''}
     placeholder={placeholder}
     onChange={handleChange}
@@ -34,8 +39,19 @@ const Input = ({
 
 function Profile ({ user }) {
   const [{ data: doctors }, { getDoctors }] = useDoctors()
-  const [, {}] = usePatientData()
-  function onSubmit (values) {}
+  const [{ loading, error }, { updateUser }] = useUserProfile()
+  const navigate = useNavigate()
+  const cognitoID = user?.username
+  const custom_role = user.attributes['custom:role']
+  const isDoctor = custom_role === 'doctor'
+
+  async function onSubmit (values) {
+    const profile = { ...values, cognitoID, custom_role }
+    console.log('profile', profile)
+    await updateUser(profile)
+    localStorage.setItem('profile-completed', 1)
+    navigate('/')
+  }
 
   useEffect(() => {
     getDoctors()
@@ -43,15 +59,17 @@ function Profile ({ user }) {
   }, [])
 
   const formikProps = useFormik({ onSubmit, initialValues, validationSchema })
-  const isDoctor = user.attributes['custom:role'] === 'doctor'
-
+  console.log('formikProps', formikProps)
   return (
     <Flex direction={'column'} alignItems='center' width='100%'>
+      {loading && <Loader variation='linear' />}
+      <ErrorAlert error={error} />
       <Card minWidth={420}>
         <Heading level={3}>Datos Personales</Heading>
         <Input name='name' placeholder='Name' {...formikProps} />
+        <Input name='lastname' placeholder='Lastname' {...formikProps} />
         <Input
-          name='type_document'
+          name='document_type'
           placeholder='Tipo Documento'
           {...formikProps}
         />

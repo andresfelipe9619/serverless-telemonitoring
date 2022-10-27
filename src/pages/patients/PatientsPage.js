@@ -21,7 +21,9 @@ export default function PatientsPage () {
       {showLoader && <Loader variation='linear' />}
       <Flex>
         {!loading &&
-          data.map(patient => <PatientCard patient={patient} go2={go2} />)}
+          data.map((patient, index) => (
+            <PatientCard key={index} patient={patient} go2={go2} />
+          ))}
       </Flex>
     </div>
   )
