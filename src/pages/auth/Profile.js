@@ -48,7 +48,8 @@ function Profile ({ user }) {
   async function onSubmit (values) {
     const profile = { ...values, cognitoID, custom_role }
     console.log('profile', profile)
-    await updateUser(profile)
+    const doctor = doctors.find(d => d.cognitoID === profile.doctor)
+    await updateUser({ ...profile, doctor })
     localStorage.setItem('profile-completed', 1)
     navigate('/')
   }
@@ -76,7 +77,7 @@ function Profile ({ user }) {
         <Input name='document' placeholder='N Documento' {...formikProps} />
         <Input name='sex' placeholder='Sexo' {...formikProps} />
         <Input
-          name='birthday'
+          name='birthdate'
           placeholder='Fecha Nacimiento'
           type='date'
           {...formikProps}
@@ -99,7 +100,12 @@ function Profile ({ user }) {
           {...formikProps}
         />
         {!isDoctor && (
-          <SelectField required={!isDoctor} name='doctor' placeholder='Doctor'>
+          <SelectField
+            name='doctor'
+            required={!isDoctor}
+            placeholder='Doctor'
+            onChange={formikProps.handleChange}
+          >
             {doctors.map((doctor, i) => (
               <option key={i} value={doctor.cognitoID}>
                 {doctor.name}
