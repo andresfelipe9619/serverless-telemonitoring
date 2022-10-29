@@ -14,6 +14,8 @@ const express = require('express')
 AWS.config.update({ region: process.env.TABLE_REGION })
 
 const dynamodb = new AWS.DynamoDB.DocumentClient()
+const sns = new AWS.SNS()
+const ses = new AWS.SES()
 
 let tableName = 'Usuarios'
 // if (process.env.ENV && process.env.ENV !== 'NONE') {
@@ -134,15 +136,14 @@ app.get(path + '/object' + hashKeyPath + sortKeyPath, function (req, res) {
 })
 
 /************************************
- * HTTP put method for insert object *
+ * HTTP put method for update object *
  *************************************/
 
 app.put(path, function (req, res) {
+  const { requestContext } = req?.apiGateway?.event || {}
   if (userIdPresent) {
-    req.body['userId'] =
-      req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH
+    req.body['userId'] = requestContext.identity.cognitoIdentityId || UNAUTH
   }
-
   let putItemParams = {
     TableName: tableName,
     Item: req.body
@@ -161,24 +162,26 @@ app.put(path, function (req, res) {
  * HTTP post method for insert object *
  *************************************/
 
-app.post(path, function (req, res) {
+app.post(path, async function (req, res) {
+  const { url, body, apiGateway } = req
+  const { identity } = apiGateway?.event?.requestContext || {}
   if (userIdPresent) {
-    req.body['userId'] =
-      req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH
+    body['userId'] = identity.cognitoIdentityId || UNAUTH
   }
-
-  let putItemParams = {
+  const { doctor, ...patient } = body
+  if (doctor) patient.doctor = doctor?.cognitoID || ''
+  const putItemParams = {
     TableName: tableName,
-    Item: req.body
+    Item: patient
   }
-  dynamodb.put(putItemParams, (err, data) => {
-    if (err) {
-      res.statusCode = 500
-      res.json({ error: err, url: req.url, body: req.body })
-    } else {
-      res.json({ success: 'post call succeed!', url: req.url, data: data })
-    }
-  })
+  try {
+    const data = await dynamodb.put(putItemParams).promise()
+    if (doctor) await notifyDoctorForNewPatientAssigned(doctor, patient)
+    res.json({ success: 'post call succeed!', url, data })
+  } catch (error) {
+    res.statusCode = 500
+    res.json({ error, url, body })
+  }
 })
 
 /**************************************
@@ -224,6 +227,51 @@ app.delete(path + '/object' + hashKeyPath + sortKeyPath, function (req, res) {
     }
   })
 })
+
+async function notifyDoctorForNewPatientAssigned (doctor, patient) {
+  const subject = 'Nuevo Paciente Asignado.'
+  const message = `Buen día ${doctor.name}.\n
+  El Paciente ${patient.name} ha solicitado su atención para realizar el diagnostico de signos vitales
+  a continuación le compartimos los datos de su paciente asignado, si desea realizar monitoreo dar click aqui.\n`
+  if (doctor?.phone) {
+    await sendSMS(doctor.phone, `${subject}\n${message}`)
+  }
+  if (doctor?.email) {
+    await sendEmail(doctor.email, subject, message)
+  }
+}
+
+async function sendSMS (to, message) {
+  const smsResult = await sns
+    .publish({
+      Message: message,
+      PhoneNumber: to
+    })
+    .promise()
+  console.log('smsResult', smsResult)
+  return smsResult
+}
+
+async function sendEmail (to, subject, message) {
+  const emailResult = await ses
+    .sendEmail({
+      Destination: {
+        ToAddresses: [to]
+      },
+      Source: 'andresfelipe9619@gmail.com',
+      Message: {
+        Subject: { Data: subject },
+        Body: {
+          Text: {
+            Data: message
+          }
+        }
+      }
+    })
+    .promise()
+  console.log('emailResult', emailResult)
+  return emailResult
+}
 
 app.listen(3000, function () {
   console.log('App started')

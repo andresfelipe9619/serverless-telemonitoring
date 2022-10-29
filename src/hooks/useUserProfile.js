@@ -9,7 +9,7 @@ export default function useUserProfile () {
   const updateUser = useCallback(async function updateUser (props) {
     try {
       setLoading(true)
-      const response = await API.put('TelemonitoringAPI', `/users/`, {
+      const response = await API.post('TelemonitoringAPI', `/users/`, {
         body: props
       })
       setData(props)

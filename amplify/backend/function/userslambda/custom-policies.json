@@ -1,6 +1,16 @@
 [
   {
-    "Action": [],
-    "Resource": []
+    "Action": [
+      "ses:SendEmail"
+    ],
+    "Effect": "Allow",
+    "Resource": "arn:aws:ses:us-east-1:710888295133:identity/andresfelipe9619@gmail.com"
+  },
+  {
+    "Action": [
+      "sns:Publish"
+    ],
+    "Effect": "Allow",
+    "Resource": "*"
   }
 ]

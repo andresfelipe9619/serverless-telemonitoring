@@ -81,7 +81,6 @@ function Profile ({ user }) {
           type='date'
           {...formikProps}
         />
-        <Input name='email' disabed placeholder='E-mail' {...formikProps} />
         <Input name='phone' placeholder='Celular' {...formikProps} />
         <Input name='address' placeholder='Dirección' {...formikProps} />
       </Card>
