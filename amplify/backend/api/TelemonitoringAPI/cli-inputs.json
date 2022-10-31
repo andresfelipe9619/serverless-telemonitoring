@@ -19,24 +19,6 @@
         "setting": "private"
       }
     },
-    "/oximetry": {
-      "name": "/oximetry",
-      "lambdaFunction": "oximetrylambda",
-      "permissions": {
-        "groups": {
-          "Doctors": [
-            "create",
-            "read",
-            "update",
-            "delete"
-          ],
-          "Patients": [
-            "read"
-          ]
-        },
-        "setting": "private"
-      }
-    },
     "/users": {
       "name": "/users",
       "lambdaFunction": "userslambda",

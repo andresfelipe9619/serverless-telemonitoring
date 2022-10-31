@@ -78,25 +78,6 @@
         }
       ]
     },
-    "oximetrylambda": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "DatosOximetria",
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "attributeEnvMap": {
-            "Name": "TABLE_NAME",
-            "Arn": "TABLE_ARN"
-          }
-        }
-      ]
-    },
     "userslambda": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -118,12 +99,6 @@
     }
   },
   "storage": {
-    "DatosOximetria": {
-      "service": "DynamoDB",
-      "serviceType": "imported",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": []
-    },
     "Datostelemonitoreo": {
       "service": "DynamoDB",
       "serviceType": "imported",
@@ -175,14 +150,6 @@
           "resourceName": "userPoolGroups",
           "attributes": [
             "PatientsGroupRole"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "oximetrylambda",
-          "attributes": [
-            "Name",
-            "Arn"
           ]
         },
         {

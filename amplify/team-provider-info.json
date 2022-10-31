@@ -27,24 +27,12 @@
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
           "s3Key": "amplify-builds/telemonitoringlambda-45486a766b46634c5945-build.zip"
         },
-        "oximetrylambda": {
-          "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
-          "s3Key": "amplify-builds/oximetrylambda-525373485855486d3762-build.zip"
-        },
         "userslambda": {
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
           "s3Key": "amplify-builds/userslambda-464e4135764c345a6b4d-build.zip"
         }
       },
       "storage": {
-        "DatosOximetria": {
-          "tableName": "Datos_Oximetria",
-          "region": "us-east-1",
-          "arn": "arn:aws:dynamodb:us-east-1:710888295133:table/Datos_Oximetria",
-          "streamArn": "arn:aws:dynamodb:us-east-1:710888295133:table/Datos_Oximetria/stream/2022-10-08T02:43:01.151",
-          "partitionKeyName": "timestamp",
-          "partitionKeyType": "S"
-        },
         "Datostelemonitoreo": {
           "tableName": "Datos_telemonitoreo",
           "region": "us-east-1",
