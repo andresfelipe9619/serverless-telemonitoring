@@ -77,7 +77,7 @@ function ProtectedRoute ({ user, doctoronly, children }) {
   const isDoctor = user?.attributes['custom:role'] === 'doctor'
   const userId = user?.username
   const item = localStorage.getItem('profile-completed')
-  const completed = isNaN(item) ? 0 : +item // 1
+  const completed = isNaN(item) ? 1 : +item
   console.log('completed', completed)
   if (!completed) {
     return <Navigate to={`/profile`} replace />
