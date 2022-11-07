@@ -59,25 +59,6 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
-    "telemonitoringlambda": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "storage",
-          "resourceName": "Datostelemonitoreo",
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "attributeEnvMap": {
-            "Name": "TABLE_NAME",
-            "Arn": "TABLE_ARN"
-          }
-        }
-      ]
-    },
     "userslambda": {
       "build": true,
       "providerPlugin": "awscloudformation",
@@ -99,17 +80,15 @@
     }
   },
   "storage": {
-    "Datostelemonitoreo": {
-      "service": "DynamoDB",
-      "serviceType": "imported",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": []
-    },
     "Usuarios": {
       "service": "DynamoDB",
       "serviceType": "imported",
       "providerPlugin": "awscloudformation",
       "dependsOn": []
+    },
+    "dynamostorage": {
+      "service": "DynamoDB",
+      "providerPlugin": "awscloudformation"
     }
   },
   "hosting": {
@@ -125,7 +104,7 @@
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "telemonitoringlambda",
+          "resourceName": "userslambda",
           "attributes": [
             "Name",
             "Arn"
@@ -150,14 +129,6 @@
           "resourceName": "userPoolGroups",
           "attributes": [
             "PatientsGroupRole"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "userslambda",
-          "attributes": [
-            "Name",
-            "Arn"
           ]
         }
       ]

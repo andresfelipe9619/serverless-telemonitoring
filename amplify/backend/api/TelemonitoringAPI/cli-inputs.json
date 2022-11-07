@@ -1,24 +1,6 @@
 {
   "version": 1,
   "paths": {
-    "/telemonitoring": {
-      "name": "/telemonitoring",
-      "lambdaFunction": "telemonitoringlambda",
-      "permissions": {
-        "groups": {
-          "Doctors": [
-            "create",
-            "read",
-            "update",
-            "delete"
-          ],
-          "Patients": [
-            "read"
-          ]
-        },
-        "setting": "private"
-      }
-    },
     "/users": {
       "name": "/users",
       "lambdaFunction": "userslambda",
