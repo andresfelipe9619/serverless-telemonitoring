@@ -77,6 +77,25 @@
           }
         }
       ]
+    },
+    "telemonitoring": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "telemonitoring",
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "attributeEnvMap": {
+            "Name": "TABLE_NAME",
+            "Arn": "TABLE_ARN"
+          }
+        }
+      ]
     }
   },
   "storage": {
@@ -86,7 +105,7 @@
       "providerPlugin": "awscloudformation",
       "dependsOn": []
     },
-    "dynamostorage": {
+    "telemonitoring": {
       "service": "DynamoDB",
       "providerPlugin": "awscloudformation"
     }
@@ -129,6 +148,14 @@
           "resourceName": "userPoolGroups",
           "attributes": [
             "PatientsGroupRole"
+          ]
+        },
+        {
+          "category": "function",
+          "resourceName": "telemonitoring",
+          "attributes": [
+            "Name",
+            "Arn"
           ]
         }
       ]

@@ -20,6 +20,25 @@
         },
         "setting": "private"
       }
+    },
+    "/telemonitoring": {
+      "name": "/telemonitoring",
+      "lambdaFunction": "telemonitoring",
+      "permissions": {
+        "groups": {
+          "Doctors": [
+            "create",
+            "read",
+            "update"
+          ],
+          "Patients": [
+            "create",
+            "read",
+            "update"
+          ]
+        },
+        "setting": "private"
+      }
     }
   }
 }
