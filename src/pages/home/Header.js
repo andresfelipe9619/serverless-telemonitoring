@@ -11,10 +11,10 @@ export default function Header (props) {
   return (
     <View className='header'>
       <Flex width='100%'>
-        <Button onClick={go2('/')}>Inicio</Button>
-        <Button onClick={go2('/profile')}>Perfil</Button>
+        <Button onClick={go2('/')}>🏠 Inicio</Button>
+        <Button onClick={go2('/profile')}>😎 Perfil</Button>
         <Button alignSelf={'flex-end'} onClick={props.signOut}>
-          Cerrar Sesión
+          🚪 Cerrar Sesión
         </Button>
       </Flex>
     </View>

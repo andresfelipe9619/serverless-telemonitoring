@@ -11,25 +11,11 @@ import {
 } from '@aws-amplify/ui-react'
 import useDoctors from '../../hooks/useDoctors'
 import { useFormik } from 'formik'
-import { validationSchema, getInitialValues } from './settings'
+import { validationSchema, getInitialValues, COLOMBIAN_CODE, GenreOptions, DocumentTypeOptions } from './settings'
 import useUserProfile from '../../hooks/useUserProfile'
 import ErrorAlert from '../error/ErrorAlert'
 import { useNavigate } from 'react-router-dom'
 
-const COLOMBIAN_CODE = '+57'
-
-export const DocumentTypeOptions = [
-  { value: 'T.I', label: 'T.I' },
-  { value: 'C.C', label: 'C.C' },
-  { value: 'C.E', label: 'Cedula de Extrangería' },
-  { value: 'R.C', label: 'Registro Civil' }
-]
-
-export const GenreOptions = [
-  { value: 'M', label: 'Masculino' },
-  { value: 'F', label: 'Femenino' },
-  { value: 'OTRO', label: 'Otro' }
-]
 
 const Input = ({
   name,

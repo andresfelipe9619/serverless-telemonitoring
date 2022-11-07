@@ -2,6 +2,22 @@ import * as Yup from 'yup'
 
 const OBLIGATORY_TEXT = 'Campo Obligatorio!'
 
+export const COLOMBIAN_CODE = '+57'
+
+export const DocumentTypeOptions = [
+  { value: 'T.I', label: 'T.I' },
+  { value: 'C.C', label: 'C.C' },
+  { value: 'C.E', label: 'Cedula de Extrangería' },
+  { value: 'R.C', label: 'Registro Civil' }
+]
+
+export const GenreOptions = [
+  { value: 'M', label: 'Masculino' },
+  { value: 'F', label: 'Femenino' },
+  { value: 'OTRO', label: 'Otro' }
+]
+
+
 export const validationSchema = Yup.object().shape({
   height: Yup.number().required(OBLIGATORY_TEXT),
   weight: Yup.number().required(OBLIGATORY_TEXT),

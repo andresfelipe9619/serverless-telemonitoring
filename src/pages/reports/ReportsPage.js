@@ -1,8 +1,10 @@
 import {
   Button,
+  Card,
   Flex,
   Heading,
   Loader,
+  Text,
   TextField,
   View
 } from '@aws-amplify/ui-react'
@@ -28,25 +30,37 @@ export default function ReportsPage () {
 
   return (
     <View>
-      <ErrorAlert error={error} />
-      <Flex>
-        <TextField
-          type='date'
-          value={startDate}
-          label='Fecha y Hora Inicio'
-          onChange={e => setStartDate(e.target.value)}
-        />
-        <TextField
-          type='date'
-          value={endDate}
-          label='Fecha y Hora Fin'
-          onChange={e => setEndDate(e.target.value)}
-        />
-      </Flex>
-      <Button onClick={handleAnalysis}>Analizar</Button>
-      <Heading>INFORME CONSOLIDADO DE TELEMONITOREO DE SIGNOS VITALES</Heading>
-      {showLoader && <Loader variation='linear' />}
-      {haveData && <Chart data={data} />}
+      <Card margin={20}>
+        <ErrorAlert error={error} />
+        <Flex justifyContent='center'>
+          <TextField
+            type='datetime-local'
+            value={startDate}
+            label='Fecha y Hora Inicio'
+            onChange={e => setStartDate(e.target.value)}
+          />
+          <TextField
+            type='datetime-local'
+            value={endDate}
+            label='Fecha y Hora Fin'
+            onChange={e => setEndDate(e.target.value)}
+          />
+        </Flex>
+        <Flex justifyContent='center' margin={20}>
+          <Button onClick={handleAnalysis}>Analizar</Button>
+        </Flex>
+      </Card>
+
+      <Card margin={20}>
+        <Heading textAlign='center' margin={20}>
+          INFORME CONSOLIDADO DE TELEMONITOREO DE SIGNOS VITALES
+        </Heading>
+        {showLoader && <Loader variation='linear' />}
+        {haveData && <Chart data={data} />}
+        {!haveData && !error && (
+          <Text textAlign='center'>No hay datos para mostrar...</Text>
+        )}
+      </Card>
     </View>
   )
 }
