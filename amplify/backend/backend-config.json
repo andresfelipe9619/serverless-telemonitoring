@@ -78,7 +78,7 @@
         }
       ]
     },
-    "telemonitoring": {
+    "telemonitoringlambda": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda",
@@ -152,7 +152,7 @@
         },
         {
           "category": "function",
-          "resourceName": "telemonitoring",
+          "resourceName": "telemonitoringlambda",
           "attributes": [
             "Name",
             "Arn"

@@ -27,10 +27,16 @@ export type AmplifyDependentResourcesAttributes = {
             "Arn": "string",
             "Region": "string",
             "LambdaExecutionRole": "string"
+        },
+        "telemonitoringlambda": {
+            "Name": "string",
+            "Arn": "string",
+            "Region": "string",
+            "LambdaExecutionRole": "string"
         }
     },
     "storage": {
-        "dynamostorage": {
+        "telemonitoring": {
             "Name": "string",
             "Arn": "string",
             "StreamArn": "string",

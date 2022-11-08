@@ -23,7 +23,7 @@
     },
     "/telemonitoring": {
       "name": "/telemonitoring",
-      "lambdaFunction": "telemonitoring",
+      "lambdaFunction": "telemonitoringlambda",
       "permissions": {
         "groups": {
           "Doctors": [

@@ -17,7 +17,7 @@ function useTelemonitoring () {
         }
         const response = await API.get(
           'TelemonitoringAPI',
-          '/telemonitoring/timestamp',
+          '/telemonitoring/PK',
           options
         )
         console.log('response', response)

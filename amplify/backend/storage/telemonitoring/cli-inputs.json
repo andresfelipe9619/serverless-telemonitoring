@@ -1,6 +1,6 @@
 {
   "resourceName": "telemonitoring",
-  "tableName": "Telemonitoring",
+  "tableName": "TelemonitoringData",
   "partitionKey": {
     "fieldName": "PK",
     "fieldType": "string"
