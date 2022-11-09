@@ -15,7 +15,7 @@ AWS.config.update({ region: process.env.TABLE_REGION })
 
 const dynamodb = new AWS.DynamoDB.DocumentClient()
 
-const tableName = 'Telemonitoring-dev'
+const tableName = 'TelemonitoringData-dev'
 
 const userIdPresent = false // TODO: update in case is required to use that definition
 const partitionKeyName = 'PK'
@@ -50,10 +50,14 @@ const convertUrlType = (param, type) => {
   }
 }
 
+const getEvent = req => req?.apiGateway?.event || {}
+
+function getParams (req) {
+  return getEvent(req).queryStringParameters || {}
+}
+
 function getCognitoIdentityId (req) {
-  return (
-    req.apiGateway.event.requestContext.identity.cognitoIdentityId || UNAUTH
-  )
+  return getEvent(req).requestContext?.identity?.cognitoIdentityId || UNAUTH
 }
 
 /********************************
@@ -61,36 +65,59 @@ function getCognitoIdentityId (req) {
  ********************************/
 
 app.get(path + hashKeyPath, function (req, res) {
-  const params = req?.apiGateway?.event?.queryStringParameters || {}
+  const params = getParams(req)
   console.log('params', params)
-  const { size } = params
-  const today = new Date().toString()
-  console.log('today', today)
-  // const queryParams = {
-  //   TableName: tableName,
-  //   ...(size ? { PageSize: size } : {}),
-  //   KeyConditionExpression: 'begins_with(#time, :time)',
-  //   ExpressionAttributeNames: {
-  //     '#time': 'timestamp'
-  //   },
-  //   ExpressionAttributeValues: {
-  //     ':time': today
-  //   }
-  // }
+  const { size, device_id, start_date, end_date } = params
+  const haveDateRange = start_date && end_date
+
+  const buildConditionExpression = () => {
+    let condition = '#timePK = :time'
+    if (haveDateRange) {
+      return condition + 'and #timeSK between(#start,#end)'
+    }
+    return condition
+  }
+
   const queryParams = {
     TableName: tableName,
     ConsistentRead: true,
-    ...(size ? { Limit: size } : {})
-    // FilterExpression: '#time = :time',
-    // ExpressionAttributeNames: {
-    //   '#time': 'custom_role'
-    // },
-    // ExpressionAttributeValues: {
-    //   ':time': today
-    // }
+    ...(size ? { PageSize: size } : {}),
+    KeyConditionExpression: buildConditionExpression(),
+    ExpressionAttributeNames: {
+      ...(haveDateRange ? { '#timeSK': 'SK' } : {}),
+      '#timePK': 'PK'
+    },
+    ExpressionAttributeValues: {
+      ':time': `TIMESTAMP#${device_id}`,
+      ...(haveDateRange ? { '#end': end_date, '#start': start_date } : {})
+    }
   }
 
-  dynamodb.scan(queryParams, (err, data) => {
+  dynamodb.query(queryParams, (err, data) => {
+    if (err) {
+      res.statusCode = 500
+      res.json({ error: 'Could not load items: ' + err })
+    } else {
+      console.log('data', data)
+      res.json(data.Items)
+    }
+  })
+})
+/********************************
+ * HTTP Get method for list objects *
+ ********************************/
+
+app.get(path + '/devices', function (req, res) {
+  console.log('Getting devices...')
+  const queryParams = {
+    TableName: tableName,
+    KeyConditionExpression: 'PK = :device',
+    ExpressionAttributeValues: {
+      ':device': 'DEVICE'
+    }
+  }
+
+  dynamodb.query(queryParams, (err, data) => {
     if (err) {
       res.statusCode = 500
       res.json({ error: 'Could not load items: ' + err })
