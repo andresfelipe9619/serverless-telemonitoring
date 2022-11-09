@@ -64,6 +64,31 @@ function getCognitoIdentityId (req) {
  * HTTP Get method for list objects *
  ********************************/
 
+ app.get(path + '/devices', function (req, res) {
+  console.log('Getting devices...')
+  const queryParams = {
+    TableName: tableName,
+    KeyConditionExpression: 'PK = :device',
+    ExpressionAttributeValues: {
+      ':device': 'DEVICE'
+    }
+  }
+
+  dynamodb.query(queryParams, (err, data) => {
+    if (err) {
+      res.statusCode = 500
+      res.json({ error: 'Could not load items: ' + err })
+    } else {
+      console.log('data', data)
+      res.json(data.Items)
+    }
+  })
+})
+
+/********************************
+ * HTTP Get method for list objects *
+ ********************************/
+
 app.get(path + hashKeyPath, function (req, res) {
   const params = getParams(req)
   console.log('params', params)
@@ -103,30 +128,7 @@ app.get(path + hashKeyPath, function (req, res) {
     }
   })
 })
-/********************************
- * HTTP Get method for list objects *
- ********************************/
 
-app.get(path + '/devices', function (req, res) {
-  console.log('Getting devices...')
-  const queryParams = {
-    TableName: tableName,
-    KeyConditionExpression: 'PK = :device',
-    ExpressionAttributeValues: {
-      ':device': 'DEVICE'
-    }
-  }
-
-  dynamodb.query(queryParams, (err, data) => {
-    if (err) {
-      res.statusCode = 500
-      res.json({ error: 'Could not load items: ' + err })
-    } else {
-      console.log('data', data)
-      res.json(data.Items)
-    }
-  })
-})
 /*****************************************
  * HTTP Get method for get single object *
  *****************************************/
