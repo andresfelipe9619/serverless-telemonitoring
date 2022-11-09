@@ -19,7 +19,7 @@ function useDoctors () {
         '/users/cognitoID',
         options
       )
-      console.log('response', response)
+      console.log('Doctors: ', response)
       setData(response)
     } catch (error) {
       console.error(error)

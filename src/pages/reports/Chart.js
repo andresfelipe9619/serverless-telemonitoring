@@ -100,13 +100,13 @@ const defaultChartData = [
 
 function buildChartData (data) {
   const result = data
-    .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+    .sort((a, b) => new Date(b.SK) - new Date(a.SK))
     .reduce((chartData, item) => {
       let [HeartBeat, SPO2] = chartData
-      if (!item.timestamp) return chartData
-      let [x] = item.timestamp.split('.')
-      if (!x || isNaN(item.HeartBeat) || isNaN(item.Spo2)) return chartData
-      if (item.HeartBeat < 0 || item.Spo2 < 0) return chartData
+      if (!item.SK) return chartData
+      let [x] = item.SK.split('.')
+      if (!x || isNaN(item.HeartBeat) || isNaN(item.SPO2)) return chartData
+      if (item.HeartBeat < 0 || item.SPO2 < 0) return chartData
       return [
         {
           ...HeartBeat,
@@ -114,7 +114,7 @@ function buildChartData (data) {
         },
         {
           ...SPO2,
-          data: [...SPO2.data, { x, y: item.Spo2 }]
+          data: [...SPO2.data, { x, y: item.SPO2 }]
         }
       ]
     }, defaultChartData)

@@ -7,11 +7,12 @@ function useTelemonitoring () {
   const [error, setError] = useState(null)
 
   const getTelemonitoringData = useCallback(
-    async function getTelemonitoringData ({ size = 40 } = {}) {
+    async function getTelemonitoringData (device_id, { size = 40 } = {}) {
       try {
         setLoading(true)
         const options = {
           queryStringParameters: {
+            device_id,
             size
           }
         }

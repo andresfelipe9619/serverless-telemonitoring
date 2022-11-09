@@ -1,25 +1,19 @@
 import { useCallback, useState } from 'react'
 import { API } from 'aws-amplify'
 
-function usePatients () {
+function useDevices () {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const getPatients = useCallback(async function getPatients () {
+  const getDevices = useCallback(async function getDevices () {
     try {
       setLoading(true)
-      const options = {
-        queryStringParameters: {
-          role: 'patient'
-        }
-      }
       const response = await API.get(
         'TelemonitoringAPI',
-        '/users/cognitoID',
-        options
+        '/telemonitoring/devices'
       )
-      console.log('Patients: ', response)
+      console.log('Devices: ', response)
       setData(response)
     } catch (error) {
       console.error(error)
@@ -29,7 +23,7 @@ function usePatients () {
     }
   }, [])
 
-  return [{ data, loading, error }, { getPatients }]
+  return [{ data, loading, error }, { getDevices }]
 }
 
-export default usePatients
+export default useDevices

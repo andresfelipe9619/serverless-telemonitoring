@@ -11,7 +11,7 @@ export default function TelemonitoringPreview () {
   ] = useTelemonitoring()
 
   useEffect(() => {
-    getTelemonitoringData()
+    getTelemonitoringData(1)
     // eslint-disable-next-line
   }, [])
 

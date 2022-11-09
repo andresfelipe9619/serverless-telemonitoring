@@ -19,10 +19,12 @@ import usePatientData from '../../hooks/usePatientData'
 import ErrorAlert from '../error/ErrorAlert'
 import TelemonitoringPreview from './TelemonitoringPreview'
 import Geolocation from './Geolocation'
+import useDevices from '../../hooks/useDevices'
 
 export default function PatientDetail () {
   const navigate = useNavigate()
   const params = useParams()
+
   const { id } = params
 
   const [
@@ -68,7 +70,13 @@ export default function PatientDetail () {
 }
 
 function Content ({ patient, handleAssignDevice }) {
+  const [{ data: devices }, { getDevices }] = useDevices()
   const [device, setDevice] = useState(null)
+
+  useEffect(() => {
+    getDevices()
+    // eslint-disable-next-line
+  }, [])
 
   useEffect(() => {
     if (!patient.device_id) return
@@ -139,9 +147,11 @@ function Content ({ patient, handleAssignDevice }) {
             value={device}
             onChange={e => setDevice(e.target.value)}
           >
-            <option value='1'>Dispositivo 1</option>
-            <option value='2'>Dispositivo 2</option>
-            <option value='3'>Dispositivo 3</option>
+            {devices.map(d => (
+              <option key={d.PK} value={d.SK}>
+                {d.Name}
+              </option>
+            ))}
           </SelectField>
           <Button
             disabled={device === patient.device_id}

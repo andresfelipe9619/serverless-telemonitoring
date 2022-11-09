@@ -11,17 +11,23 @@ import {
 } from '@aws-amplify/ui-react'
 import useDoctors from '../../hooks/useDoctors'
 import { useFormik } from 'formik'
-import { validationSchema, getInitialValues, COLOMBIAN_CODE, GenreOptions, DocumentTypeOptions } from './settings'
+import {
+  validationSchema,
+  getInitialValues,
+  COLOMBIAN_CODE,
+  GenreOptions,
+  DocumentTypeOptions
+} from './settings'
 import useUserProfile from '../../hooks/useUserProfile'
 import ErrorAlert from '../error/ErrorAlert'
 import { useNavigate } from 'react-router-dom'
-
 
 const Input = ({
   name,
   required = true,
   placeholder,
   values,
+  loading,
   isSubmitting,
   type = 'text',
   handleChange,
@@ -32,7 +38,7 @@ const Input = ({
     type={type}
     name={name}
     isRequired={required}
-    disabled={isSubmitting}
+    isDisabled={isSubmitting || loading}
     value={values[name] || ''}
     placeholder={placeholder}
     onChange={handleChange}
@@ -89,9 +95,20 @@ function Profile ({ user }) {
       <ErrorAlert error={error} />
       <Card minWidth={420}>
         <Heading level={3}>Datos Personales</Heading>
-        <Input name='name' placeholder='Name' {...formikProps} />
-        <Input name='lastname' placeholder='Lastname' {...formikProps} />
+        <Input
+          name='name'
+          placeholder='Name'
+          loading={loading}
+          {...formikProps}
+        />
+        <Input
+          name='lastname'
+          placeholder='Lastname'
+          loading={loading}
+          {...formikProps}
+        />
         <SelectField
+          isDisabled={loading}
           isRequired
           name='document_type'
           placeholder='Tipo Documento'
@@ -104,8 +121,14 @@ function Profile ({ user }) {
             </option>
           ))}
         </SelectField>
-        <Input name='document' placeholder='N Documento' {...formikProps} />
+        <Input
+          name='document'
+          placeholder='N Documento'
+          loading={loading}
+          {...formikProps}
+        />
         <SelectField
+          isDisabled={loading}
           name='sex'
           isRequired
           placeholder='Sexo'
@@ -122,14 +145,26 @@ function Profile ({ user }) {
           name='birthdate'
           placeholder='Fecha Nacimiento'
           type='date'
+          loading={loading}
           {...formikProps}
         />
-        <Input name='phone' placeholder='Celular' {...formikProps} />
-        <Input name='address' placeholder='Dirección' {...formikProps} />
+        <Input
+          name='phone'
+          placeholder='Celular'
+          loading={loading}
+          {...formikProps}
+        />
+        <Input
+          name='address'
+          placeholder='Dirección'
+          loading={loading}
+          {...formikProps}
+        />
         {isDoctor && (
           <Input
             name='specialisation'
             placeholder='Especialización'
+            loading={loading}
             {...formikProps}
           />
         )}
@@ -148,6 +183,7 @@ function Profile ({ user }) {
                 </Badge>
               </Flex>
             }
+            loading={loading}
             {...formikProps}
           />
           <Input
@@ -161,10 +197,12 @@ function Profile ({ user }) {
                 </Badge>
               </Flex>
             }
+            loading={loading}
             {...formikProps}
           />
 
           <SelectField
+            isDisabled={loading}
             isRequired
             name='doctor'
             placeholder='Doctor'

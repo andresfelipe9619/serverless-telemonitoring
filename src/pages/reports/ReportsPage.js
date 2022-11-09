@@ -22,7 +22,7 @@ export default function ReportsPage () {
   ] = useTelemonitoring()
 
   function handleAnalysis () {
-    getTelemonitoringData()
+    getTelemonitoringData(1)
   }
 
   const haveData = !!data.length
