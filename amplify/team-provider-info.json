@@ -29,7 +29,7 @@
         },
         "telemonitoringlambda": {
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
-          "s3Key": "amplify-builds/telemonitoringlambda-796f4e4f534f54306f6f-build.zip"
+          "s3Key": "amplify-builds/telemonitoringlambda-4e4e52545a7348384348-build.zip"
         }
       },
       "storage": {
@@ -40,7 +40,9 @@
           "partitionKeyName": "cognitoID",
           "partitionKeyType": "S"
         },
-        "telemonitoring": {}
+        "telemonitoring": {},
+        "telemonitoringbucket": {},
+        "appdata": {}
       },
       "hosting": {
         "S3AndCloudFront": {}

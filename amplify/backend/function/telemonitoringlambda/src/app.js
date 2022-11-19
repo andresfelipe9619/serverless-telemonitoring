@@ -61,7 +61,7 @@ function getCognitoIdentityId (req) {
 }
 
 /********************************
- * HTTP Get method for list objects *
+ * HTTP Get method for list devices *
  ********************************/
 
  app.get(path + '/devices', function (req, res) {
@@ -86,7 +86,7 @@ function getCognitoIdentityId (req) {
 })
 
 /********************************
- * HTTP Get method for list objects *
+ * HTTP Get method for list timestamps *
  ********************************/
 
 app.get(path + hashKeyPath, function (req, res) {
@@ -98,7 +98,7 @@ app.get(path + hashKeyPath, function (req, res) {
   const buildConditionExpression = () => {
     let condition = '#timePK = :time'
     if (haveDateRange) {
-      return condition + 'and #timeSK between(#start,#end)'
+      return condition + ' AND #timeSK BETWEEN :startDate AND :endDate'
     }
     return condition
   }
@@ -114,7 +114,7 @@ app.get(path + hashKeyPath, function (req, res) {
     },
     ExpressionAttributeValues: {
       ':time': `TIMESTAMP#${device_id}`,
-      ...(haveDateRange ? { '#end': end_date, '#start': start_date } : {})
+      ...(haveDateRange ? { ':endDate': end_date, ':startDate': start_date } : {})
     }
   }
 

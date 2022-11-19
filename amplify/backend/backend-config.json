@@ -108,6 +108,15 @@
     "telemonitoring": {
       "service": "DynamoDB",
       "providerPlugin": "awscloudformation"
+    },
+    "telemonitoringbucket": {
+      "service": "S3",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": []
+    },
+    "appdata": {
+      "service": "DynamoDB",
+      "providerPlugin": "awscloudformation"
     }
   },
   "hosting": {
