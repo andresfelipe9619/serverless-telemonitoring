@@ -7,13 +7,19 @@ function useTelemonitoring () {
   const [error, setError] = useState(null)
 
   const getTelemonitoringData = useCallback(
-    async function getTelemonitoringData (device_id, { size = 40 } = {}) {
+    async function getTelemonitoringData (
+      device_id,
+      { size = 40, startDate, endDate } = {}
+    ) {
       try {
+        setError(null)
         setLoading(true)
         const options = {
           queryStringParameters: {
             device_id,
-            size
+            size,
+            ...(startDate ? { start_date: startDate } : null),
+            ...(endDate ? { end_date: endDate } : null)
           }
         }
         const response = await API.get(
