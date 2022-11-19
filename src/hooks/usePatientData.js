@@ -24,6 +24,28 @@ export default function usePatientData () {
     }
   }, [])
 
+  const assignGeolocation = useCallback(async function assignGeolocation (
+    patient,
+    location
+  ) {
+    try {
+      setLoading(true)
+      const response = await API.put('TelemonitoringAPI', `/users/`, {
+        body: {
+          ...patient,
+          location
+        }
+      })
+      setData(prev => ({ ...prev, location }))
+      console.log('Profile Data: ', response)
+    } catch (error) {
+      setError(error)
+    } finally {
+      setLoading(false)
+    }
+  },
+  [])
+
   const assignDevice = useCallback(async function assignDevice (
     patient,
     device_id
@@ -48,6 +70,6 @@ export default function usePatientData () {
 
   return [
     { data, loading, error },
-    { getPatientData, assignDevice }
+    { getPatientData, assignDevice, assignGeolocation }
   ]
 }

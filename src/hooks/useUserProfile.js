@@ -1,5 +1,6 @@
 import { API } from 'aws-amplify'
 import { useCallback, useState } from 'react'
+import { getFileFromS3 } from '../utils/aws'
 
 export default function useUserProfile() {
   const [data, setData] = useState([])
@@ -30,6 +31,9 @@ export default function useUserProfile() {
         `/users/object/${cognitoID}`
       )
       console.log('Profile Data: ', response)
+      if(response?.photo){
+        response.photo = await getFileFromS3(response?.photo)
+      }
       setData(response)
     } catch (error) {
       console.error(error)

@@ -1,41 +1,54 @@
-import { Flex, TextField, View } from '@aws-amplify/ui-react'
+import { Alert, Flex, TextField, View } from '@aws-amplify/ui-react'
 import 'leaflet'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
 
-export default function Geolocation ({ locateUser = true }) {
-  const [latitude, setLatitude] = useState(null)
-  const [longitude, setLongitude] = useState(null)
-
-  const coords = [latitude, longitude]
-
+export default function Geolocation ({
+  coords,
+  setCoords,
+  isDoctor,
+  locateUser = true
+}) {
   useEffect(() => {
-    if (!locateUser) return
-    navigator.geolocation.getCurrentPosition(function (position) {
-      const { latitude, longitude } = position.coords
-
-      setLatitude(latitude)
-      setLongitude(longitude)
-    })
-  }, [locateUser])
+    if (!locateUser || isDoctor) return
+    console.log('Getting location...')
+    navigator.geolocation.getCurrentPosition(
+      function (position) {
+        const { latitude, longitude } = position.coords
+        console.log('[latitude, longitude]', [latitude, longitude])
+        setCoords([latitude, longitude])
+      },
+      function (error) {
+        console.error(error)
+      },
+      { maximumAge: 0, timeout: 5000, enableHighAccuracy: true }
+    )
+    // eslint-disable-next-line
+  }, [locateUser, isDoctor])
 
   console.log('coords', coords)
-
+  const [latitude, longitude] = coords || []
   return (
     <View width={'100%'}>
-      <Flex margin={[8, 16]}>
+      <Flex margin={[8, 16]} alignItems='center' alignContent="center">
         <TextField
           name='latitude'
           label='Latitude'
-          placeholder={latitude}
+          value={latitude}
           type='number'
+          isDisabled={isDoctor}
         />
         <TextField
           name='longitude'
           label='Longitude'
-          placeholder={longitude}
+          value={longitude}
           type='number'
+          isDisabled={isDoctor}
         />
+        <Alert variation='info'>
+          Es necesario habilitar la geolocalización en el navegador para obtener
+          la ubicación.
+        </Alert>
       </Flex>
       {latitude && longitude && (
         <MapContainer

@@ -20,11 +20,12 @@ import ErrorAlert from '../error/ErrorAlert'
 import TelemonitoringPreview from './TelemonitoringPreview'
 import Geolocation from './Geolocation'
 import useDevices from '../../hooks/useDevices'
+import useDoctors from '../../hooks/useDoctors'
 
-export default function PatientDetail () {
+export default function PatientDetail (props) {
   const navigate = useNavigate()
   const params = useParams()
-
+  const { user } = props
   const { id } = params
 
   const [
@@ -53,14 +54,18 @@ export default function PatientDetail () {
         {loading && <Loader variation='linear' />}
         {!id && <Heading>No hay paciente con el ID especificado: {id}</Heading>}
         {data && (
-          <Content patient={data} handleAssignDevice={handleAssignDevice} />
+          <Content
+            user={user}
+            patient={data}
+            handleAssignDevice={handleAssignDevice}
+          />
         )}
       </Card>
       <Card variation='elevated'>
         <Heading level={2} margin={16} textAlign='center'>
           VISUALIZACIÓN DE LECTURA SIGNOS VITALES
         </Heading>
-        <TelemonitoringPreview />
+        <TelemonitoringPreview device={data.device_id} />
         <Flex justifyContent='center' marginTop={32}>
           <Button onClick={go2(`/reports/${id}`)}>Historial</Button>
         </Flex>
@@ -69,12 +74,18 @@ export default function PatientDetail () {
   )
 }
 
-function Content ({ patient, handleAssignDevice }) {
+function Content ({ user, patient, handleAssignDevice }) {
   const [{ data: devices }, { getDevices }] = useDevices()
+  const [
+    { data: doctors, loading: loadingDoctors },
+    { getDoctors }
+  ] = useDoctors()
   const [device, setDevice] = useState(null)
+  const [coords, setCoords] = useState([])
 
   useEffect(() => {
     getDevices()
+    getDoctors()
     // eslint-disable-next-line
   }, [])
 
@@ -83,14 +94,33 @@ function Content ({ patient, handleAssignDevice }) {
     setDevice(patient.device_id)
   }, [patient])
 
+  const doctor = (doctors || []).find(d => d.cognitoID === patient.doctor)
+  const isCurrentUserDoctor = user?.attributes['custom:role'] === 'doctor'
   return (
-    <View>
-      <Flex marginBottom={32}>
+    <View padding={'32px'}>
+      <Flex
+        marginBottom={32}
+        wrap={'wrap'}
+        justifyContent='center'
+        alignItems='flex-start'
+      >
+        <Image
+          margin={32}
+          alt='Foto Paciente'
+          src={logo}
+          objectFit='initial'
+          objectPosition='50% 50%'
+          backgroundColor='initial'
+          borderRadius='50%'
+          height='auto'
+          width='180px'
+          opacity='100%'
+        />
         <Table
-          caption=''
           variation='striped'
           highlightOnHover={false}
-          maxWidth={620}
+          minWidth={'420px'}
+          maxWidth={'800px'}
         >
           <TableBody>
             <TableRow>
@@ -123,20 +153,14 @@ function Content ({ patient, handleAssignDevice }) {
             </TableRow>
             <TableRow>
               <TableCell>Médico tratante</TableCell>
-              <TableCell>{patient.doctor}</TableCell>
+              <TableCell>
+                {loadingDoctors
+                  ? 'Cargando...'
+                  : `${doctor?.name || ''} ${doctor?.lastname || ''}`}
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
-        <Image
-          alt='Foto Paciente'
-          src={logo}
-          objectFit='initial'
-          objectPosition='50% 50%'
-          backgroundColor='initial'
-          height='30%'
-          width='30%'
-          opacity='100%'
-        />
       </Flex>
       <Flex marginBottom={32} direction='column'>
         <Heading>Dispositivo IoT</Heading>
@@ -144,11 +168,11 @@ function Content ({ patient, handleAssignDevice }) {
           <SelectField
             name='device'
             placeholder='Dispositivo'
-            value={device}
+            value={device || patient.device_id}
             onChange={e => setDevice(e.target.value)}
           >
             {devices.map(d => (
-              <option key={d.PK} value={d.SK}>
+              <option key={d.SK} value={d.SK}>
                 {d.Name}
               </option>
             ))}
@@ -159,14 +183,18 @@ function Content ({ patient, handleAssignDevice }) {
           >
             Asignar
           </Button>
-          <Button disabed={!device} onClick={handleAssignDevice('')}>
+          <Button isDisabled={!device} onClick={handleAssignDevice('')}>
             Liberar
           </Button>
         </Flex>
       </Flex>
       <Flex direction={'column'}>
         <Heading>Ubicación Geográfica</Heading>
-        <Geolocation />
+        <Geolocation
+          coords={coords}
+          setCoords={setCoords}
+          isDoctor={isCurrentUserDoctor}
+        />
       </Flex>
     </View>
   )
