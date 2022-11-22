@@ -1,26 +1,31 @@
-const aws = require('aws-sdk')
+const AWS = require('aws-sdk')
 
-const cognitoidentityserviceprovider = new aws.CognitoIdentityServiceProvider({
+const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider({
   apiVersion: '2016-04-18'
 })
+
+AWS.config.update({ region: 'us-east-1' })
+
+const dynamodb = new AWS.DynamoDB.DocumentClient()
 
 /**
  * @type {import('@types/aws-lambda').PostConfirmationTriggerHandler}
  */
 exports.handler = async event => {
   console.log('event', event)
-  const userRole = event?.request?.userAttributes['custom:role']
+  const tableName = 'AppData-dev'
+  const { userPoolId: UserPoolId, request, userName: cognito_id } = event
+  const { email, 'custom:role': userRole } = request.userAttributes
   console.log('userRole', userRole)
   const isPatient = userRole === 'patient'
   const GroupName = isPatient ? 'Patients' : process.env.GROUP
-
   const groupParams = {
     GroupName,
-    UserPoolId: event.userPoolId
+    UserPoolId
   }
   const addUserParams = {
     ...groupParams,
-    Username: event.userName
+    Username: cognito_id
   }
   /**
    * Check if the group exists; if it doesn't, create it.
@@ -36,6 +41,17 @@ exports.handler = async event => {
   await cognitoidentityserviceprovider
     .adminAddUserToGroup(addUserParams)
     .promise()
+
+  const putItemParams = {
+    TableName: tableName,
+    Item: { cognito_id, email }
+  }
+  try {
+    const data = await dynamodb.put(putItemParams).promise()
+    console.log('data', data)
+  } catch (error) {
+    console.error('Error', error)
+  }
 
   return event
 }

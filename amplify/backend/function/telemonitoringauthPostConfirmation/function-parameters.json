@@ -14,5 +14,14 @@
   "roleName": "telemonitoringauthPostConfirmation",
   "skipEdit": true,
   "GROUP": "Doctors",
-  "enableCors": false
+  "enableCors": false,
+  "permissions": {
+    "storage": {
+      "appdata": [
+        "create",
+        "read",
+        "update"
+      ]
+    }
+  }
 }

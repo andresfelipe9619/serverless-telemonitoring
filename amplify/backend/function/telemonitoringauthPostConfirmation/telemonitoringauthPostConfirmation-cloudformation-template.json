@@ -43,6 +43,18 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "storageappdataName": {
+      "Type": "String",
+      "Default": "storageappdataName"
+    },
+    "storageappdataArn": {
+      "Type": "String",
+      "Default": "storageappdataArn"
+    },
+    "storageappdataStreamArn": {
+      "Type": "String",
+      "Default": "storageappdataStreamArn"
     }
   },
   "Conditions": {
@@ -95,6 +107,15 @@
             },
             "GROUP": {
               "Ref": "GROUP"
+            },
+            "STORAGE_APPDATA_NAME": {
+              "Ref": "storageappdataName"
+            },
+            "STORAGE_APPDATA_ARN": {
+              "Ref": "storageappdataArn"
+            },
+            "STORAGE_APPDATA_STREAMARN": {
+              "Ref": "storageappdataStreamArn"
             }
           }
         },
@@ -225,6 +246,57 @@
         ]
       },
       "DependsOn": "LambdaExecutionRole"
+    },
+    "AmplifyResourcesPolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-lambda-execution-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:Put*",
+                "dynamodb:Create*",
+                "dynamodb:BatchWriteItem",
+                "dynamodb:Get*",
+                "dynamodb:BatchGetItem",
+                "dynamodb:List*",
+                "dynamodb:Describe*",
+                "dynamodb:Scan",
+                "dynamodb:Query",
+                "dynamodb:Update*",
+                "dynamodb:RestoreTable*"
+              ],
+              "Resource": [
+                {
+                  "Ref": "storageappdataArn"
+                },
+                {
+                  "Fn::Join": [
+                    "/",
+                    [
+                      {
+                        "Ref": "storageappdataArn"
+                      },
+                      "index/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
     }
   },
   "Outputs": {
