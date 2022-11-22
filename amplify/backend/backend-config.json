@@ -57,24 +57,16 @@
     "telemonitoringauthPostConfirmation": {
       "build": true,
       "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "userslambda": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
       "service": "Lambda",
       "dependsOn": [
         {
           "category": "storage",
-          "resourceName": "Usuarios",
+          "resourceName": "appdata",
           "attributes": [
             "Name",
-            "Arn"
-          ],
-          "attributeEnvMap": {
-            "Name": "TABLE_NAME",
-            "Arn": "TABLE_ARN"
-          }
+            "Arn",
+            "StreamArn"
+          ]
         }
       ]
     },
@@ -96,15 +88,43 @@
           }
         }
       ]
+    },
+    "applambda": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "storage",
+          "resourceName": "appdata",
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "attributeEnvMap": {
+            "Name": "TABLE_NAME",
+            "Arn": "TABLE_ARN"
+          }
+        }
+      ]
+    },
+    "cronlambda": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "TelemonitoringAPI",
+          "attributes": [
+            "ApiName",
+            "ApiId"
+          ]
+        }
+      ]
     }
   },
   "storage": {
-    "Usuarios": {
-      "service": "DynamoDB",
-      "serviceType": "imported",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": []
-    },
     "telemonitoring": {
       "service": "DynamoDB",
       "providerPlugin": "awscloudformation"
@@ -132,7 +152,7 @@
       "dependsOn": [
         {
           "category": "function",
-          "resourceName": "userslambda",
+          "resourceName": "telemonitoringlambda",
           "attributes": [
             "Name",
             "Arn"
@@ -161,7 +181,7 @@
         },
         {
           "category": "function",
-          "resourceName": "telemonitoringlambda",
+          "resourceName": "applambda",
           "attributes": [
             "Name",
             "Arn"

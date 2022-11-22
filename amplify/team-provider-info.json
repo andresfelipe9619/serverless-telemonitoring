@@ -23,23 +23,14 @@
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
           "s3Key": "amplify-builds/telemonitoringauthPostConfirmation-2f354270757365356867-build.zip"
         },
-        "userslambda": {
-          "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
-          "s3Key": "amplify-builds/userslambda-464e4135764c345a6b4d-build.zip"
-        },
         "telemonitoringlambda": {
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
           "s3Key": "amplify-builds/telemonitoringlambda-4e4e52545a7348384348-build.zip"
-        }
+        },
+        "applambda": {},
+        "cronlambda": {}
       },
       "storage": {
-        "Usuarios": {
-          "tableName": "Usuarios",
-          "region": "us-east-1",
-          "arn": "arn:aws:dynamodb:us-east-1:710888295133:table/Usuarios",
-          "partitionKeyName": "cognitoID",
-          "partitionKeyType": "S"
-        },
         "telemonitoring": {},
         "telemonitoringbucket": {},
         "appdata": {}

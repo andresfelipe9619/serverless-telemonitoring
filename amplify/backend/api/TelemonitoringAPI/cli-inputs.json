@@ -1,16 +1,15 @@
 {
   "version": 1,
   "paths": {
-    "/users": {
-      "name": "/users",
-      "lambdaFunction": "userslambda",
+    "/telemonitoring": {
+      "name": "/telemonitoring",
+      "lambdaFunction": "telemonitoringlambda",
       "permissions": {
         "groups": {
           "Doctors": [
             "create",
             "read",
-            "update",
-            "delete"
+            "update"
           ],
           "Patients": [
             "create",
@@ -21,15 +20,16 @@
         "setting": "private"
       }
     },
-    "/telemonitoring": {
-      "name": "/telemonitoring",
-      "lambdaFunction": "telemonitoringlambda",
+    "/app": {
+      "name": "/app",
+      "lambdaFunction": "applambda",
       "permissions": {
         "groups": {
           "Doctors": [
             "create",
             "read",
-            "update"
+            "update",
+            "delete"
           ],
           "Patients": [
             "create",
