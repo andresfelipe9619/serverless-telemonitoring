@@ -16,7 +16,7 @@ function usePatients () {
       }
       const response = await API.get(
         'TelemonitoringAPI',
-        '/users/cognitoID',
+        '/users/cognito_id',
         options
       )
       console.log('Patients: ', response)

@@ -6,13 +6,13 @@ export default function usePatientData () {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const getPatientData = useCallback(async function getPatientData (cognitoID) {
+  const getPatientData = useCallback(async function getPatientData (cognito_id) {
     try {
       setLoading(true)
-      console.log('cognitoID', cognitoID)
+      console.log('cognito_id', cognito_id)
       const response = await API.get(
         'TelemonitoringAPI',
-        `/users/object/${cognitoID}`
+        `/users/object/${cognito_id}`
       )
       console.log('Profile Data: ', response)
       setData(response)

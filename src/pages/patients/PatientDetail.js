@@ -94,7 +94,7 @@ function Content ({ user, patient, handleAssignDevice }) {
     setDevice(patient.device_id)
   }, [patient])
 
-  const doctor = (doctors || []).find(d => d.cognitoID === patient.doctor)
+  const doctor = (doctors || []).find(d => d.cognito_id === patient.doctor)
   const isCurrentUserDoctor = user?.attributes['custom:role'] === 'doctor'
   return (
     <View padding={'32px'}>

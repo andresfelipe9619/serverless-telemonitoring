@@ -22,13 +22,13 @@ export default function useUserProfile() {
     }
   }, [])
 
-  const getProfileData = useCallback(async function getProfileData(cognitoID) {
+  const getProfileData = useCallback(async function getProfileData(cognito_id) {
     try {
       setLoading(true)
-      console.log('cognitoID', cognitoID)
+      console.log('cognito_id', cognito_id)
       const response = await API.get(
         'TelemonitoringAPI',
-        `/users/object/${cognitoID}`
+        `/users/object/${cognito_id}`
       )
       console.log('Profile Data: ', response)
       if(response?.photo){

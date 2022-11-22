@@ -76,20 +76,20 @@ function Profile ({ user }) {
     { data: profileData, loading, error },
     { updateUser, getProfileData }
   ] = useUserProfile()
-  const { username: cognitoID, attributes } = user || {}
+  const { username: cognito_id, attributes } = user || {}
   const { email, 'custom:role': custom_role } = attributes
   const isDoctor = custom_role === 'doctor'
 
   async function onSubmit (values) {
     const profile = {
       ...values,
-      cognitoID,
+      cognito_id,
       custom_role,
       device_id: profileData?.device_id || ''
     }
     console.log('profile', profile)
     const phone = getPhonenumber(profile)
-    const doctor = doctors.find(d => d.cognitoID === profile.doctor)
+    const doctor = doctors.find(d => d.cognito_id === profile.doctor)
     let photo = profileData?.photo || ''
     if (uploadedFile) {
       try {
@@ -106,10 +106,10 @@ function Profile ({ user }) {
   }
 
   useEffect(() => {
-    if (!cognitoID) return
-    getProfileData(cognitoID)
+    if (!cognito_id) return
+    getProfileData(cognito_id)
     //eslint-disable-next-line
-  }, [cognitoID])
+  }, [cognito_id])
 
   useEffect(() => {
     getDoctors()
@@ -291,7 +291,7 @@ function Profile ({ user }) {
             onChange={formikProps.handleChange}
           >
             {doctors.map((doctor, i) => (
-              <option key={i} value={doctor.cognitoID}>
+              <option key={i} value={doctor.cognito_id}>
                 {doctor.name} {doctor.lastname} - {doctor.specialisation}
               </option>
             ))}

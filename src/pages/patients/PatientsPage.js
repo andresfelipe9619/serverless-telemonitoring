@@ -34,7 +34,7 @@ function PatientCard ({ patient, go2 }) {
   return (
     <Card variation='elevated' className='patient-card col-3'>
       <Heading>{patient.name}</Heading>
-      <Button onClick={go2(`/patients/${patient?.cognitoID}`)}>
+      <Button onClick={go2(`/patients/${patient?.cognito_id}`)}>
         Telemonitoreo
       </Button>
     </Card>
