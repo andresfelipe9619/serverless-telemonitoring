@@ -15,7 +15,7 @@ import ErrorAlert from '../error/ErrorAlert'
 export default function PatientsPage ({ user }) {
   const navigate = useNavigate()
   const [{ data, loading, error }, { getPatients }] = usePatients()
-  const { username } = user?.attributes
+  const { username } = user
   const go2 = path => () => navigate(path)
 
   useEffect(() => {

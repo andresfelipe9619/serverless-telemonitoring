@@ -10,9 +10,10 @@ export default function usePatientData () {
     try {
       setLoading(true)
       console.log('cognito_id', cognito_id)
+      const PK = 'PATIENT'
       const response = await API.get(
         'TelemonitoringAPI',
-        `/app/object/patient/${cognito_id}`
+        `/app/object/${PK}/${cognito_id}`
       )
       console.log('Profile Data: ', response)
       setData(response)
