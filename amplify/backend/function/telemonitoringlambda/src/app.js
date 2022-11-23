@@ -19,9 +19,9 @@ const tableName = 'TelemonitoringData-dev'
 
 const userIdPresent = false // TODO: update in case is required to use that definition
 const partitionKeyName = 'PK'
-const partitionKeyType = ''
+const partitionKeyType = 'S'
 const sortKeyName = 'SK'
-const sortKeyType = ''
+const sortKeyType = 'S'
 const hasSortKey = sortKeyName !== ''
 const path = '/telemonitoring'
 const UNAUTH = 'UNAUTH'

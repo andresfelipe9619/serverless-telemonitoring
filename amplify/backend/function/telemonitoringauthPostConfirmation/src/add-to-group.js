@@ -44,7 +44,11 @@ exports.handler = async event => {
 
   const putItemParams = {
     TableName: tableName,
-    Item: { cognito_id, email }
+    Item: {
+      PK: userRole.toUpperCase(),
+      SK: cognito_id,
+      email
+    }
   }
   try {
     const data = await dynamodb.put(putItemParams).promise()

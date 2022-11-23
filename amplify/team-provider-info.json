@@ -21,14 +21,16 @@
         "telemonitoringauthPostConfirmation": {
           "GROUP": "Doctors",
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
-          "s3Key": "amplify-builds/telemonitoringauthPostConfirmation-2f354270757365356867-build.zip"
+          "s3Key": "amplify-builds/telemonitoringauthPostConfirmation-3573474c446956666939-build.zip"
         },
         "telemonitoringlambda": {
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
-          "s3Key": "amplify-builds/telemonitoringlambda-4e4e52545a7348384348-build.zip"
+          "s3Key": "amplify-builds/telemonitoringlambda-56757869466f72447951-build.zip"
         },
-        "applambda": {},
-        "cronlambda": {}
+        "applambda": {
+          "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
+          "s3Key": "amplify-builds/applambda-7275574d554a35702b48-build.zip"
+        }
       },
       "storage": {
         "telemonitoring": {},

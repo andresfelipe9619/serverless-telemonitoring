@@ -76,20 +76,21 @@ function Profile ({ user }) {
     { data: profileData, loading, error },
     { updateUser, getProfileData }
   ] = useUserProfile()
-  const { username: cognito_id, attributes } = user || {}
-  const { email, 'custom:role': custom_role } = attributes
-  const isDoctor = custom_role === 'doctor'
+  const { username: SK, attributes } = user || {}
+  const { email, 'custom:role': PK } = attributes
+  const isDoctor = PK === 'DOCTOR'
+  const device_id = profileData?.device_id || ''
 
   async function onSubmit (values) {
     const profile = {
       ...values,
-      cognito_id,
-      custom_role,
-      device_id: profileData?.device_id || ''
+      SK,
+      PK,
+      device_id
     }
     console.log('profile', profile)
     const phone = getPhonenumber(profile)
-    const doctor = doctors.find(d => d.cognito_id === profile.doctor)
+    const doctor = doctors.find(d => d.SK === profile.doctor)
     let photo = profileData?.photo || ''
     if (uploadedFile) {
       try {
@@ -106,10 +107,10 @@ function Profile ({ user }) {
   }
 
   useEffect(() => {
-    if (!cognito_id) return
-    getProfileData(cognito_id)
+    if (!SK) return
+    getProfileData(SK, PK)
     //eslint-disable-next-line
-  }, [cognito_id])
+  }, [SK])
 
   useEffect(() => {
     getDoctors()
@@ -160,7 +161,7 @@ function Profile ({ user }) {
               src={src}
               objectFit='initial'
               objectPosition='50% 50%'
-              borderRadius="50%"
+              borderRadius='50%'
               backgroundColor='initial'
               height='auto'
               width='180px'
@@ -291,7 +292,7 @@ function Profile ({ user }) {
             onChange={formikProps.handleChange}
           >
             {doctors.map((doctor, i) => (
-              <option key={i} value={doctor.cognito_id}>
+              <option key={i} value={doctor.SK}>
                 {doctor.name} {doctor.lastname} - {doctor.specialisation}
               </option>
             ))}

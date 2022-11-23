@@ -6,19 +6,16 @@ function usePatients () {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  const getPatients = useCallback(async function getPatients () {
+  const getPatients = useCallback(async function getPatients (doctor) {
     try {
       setLoading(true)
       const options = {
         queryStringParameters: {
-          role: 'patient'
+          doctor,
+          role: 'PATIENT',
         }
       }
-      const response = await API.get(
-        'TelemonitoringAPI',
-        '/users/cognito_id',
-        options
-      )
+      const response = await API.get('TelemonitoringAPI', '/app/PK', options)
       console.log('Patients: ', response)
       setData(response)
     } catch (error) {

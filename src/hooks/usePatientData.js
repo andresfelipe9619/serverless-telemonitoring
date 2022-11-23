@@ -12,7 +12,7 @@ export default function usePatientData () {
       console.log('cognito_id', cognito_id)
       const response = await API.get(
         'TelemonitoringAPI',
-        `/users/object/${cognito_id}`
+        `/app/object/patient/${cognito_id}`
       )
       console.log('Profile Data: ', response)
       setData(response)
@@ -30,7 +30,7 @@ export default function usePatientData () {
   ) {
     try {
       setLoading(true)
-      const response = await API.put('TelemonitoringAPI', `/users/`, {
+      const response = await API.put('TelemonitoringAPI', `/app/`, {
         body: {
           ...patient,
           location
@@ -52,7 +52,7 @@ export default function usePatientData () {
   ) {
     try {
       setLoading(true)
-      const response = await API.put('TelemonitoringAPI', `/users/`, {
+      const response = await API.put('TelemonitoringAPI', `/app/`, {
         body: {
           ...patient,
           device_id

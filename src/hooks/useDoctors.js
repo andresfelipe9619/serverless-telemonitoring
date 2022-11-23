@@ -14,11 +14,7 @@ function useDoctors () {
           role: 'doctor'
         }
       }
-      const response = await API.get(
-        'TelemonitoringAPI',
-        '/users/cognito_id',
-        options
-      )
+      const response = await API.get('TelemonitoringAPI', '/app/PK', options)
       console.log('Doctors: ', response)
       setData(response)
     } catch (error) {

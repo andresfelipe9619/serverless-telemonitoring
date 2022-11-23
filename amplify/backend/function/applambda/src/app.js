@@ -59,20 +59,26 @@ const convertUrlType = (param, type) => {
 app.get(path + hashKeyPath, function (req, res) {
   const params = req.apiGateway.event.queryStringParameters
   console.log('params', params)
-  const { role } = params
+  const { role = '', doctor } = params
 
   const queryParams = {
     TableName: tableName,
-    FilterExpression: '#rol = :rol',
-    ExpressionAttributeNames: {
-      '#rol': 'custom_role'
-    },
+    KeyConditionExpression: 'PK = :rol',
+    ...(doctor
+      ? {
+          FilterExpression: '#doctor = :doctor',
+          ExpressionAttributeNames: {
+            '#doctor': 'doctor'
+          }
+        }
+      : {}),
     ExpressionAttributeValues: {
-      ':rol': role
+      ':rol': role.toUpperCase(),
+      ...(doctor ? { ':doctor': doctor } : {})
     }
   }
 
-  dynamodb.scan(queryParams, (err, data) => {
+  dynamodb.query(queryParams, (err, data) => {
     if (err) {
       res.statusCode = 500
       res.json({ error: 'Could not load items: ' + err })
@@ -166,7 +172,7 @@ app.post(path, async function (req, res) {
     body['userId'] = identity.cognitoIdentityId || UNAUTH
   }
   const { doctor, ...patient } = body
-  if (doctor) patient.doctor = doctor?.cognito_id || ''
+  if (doctor) patient.doctor = doctor?.SK || ''
   const putItemParams = {
     TableName: tableName,
     Item: patient

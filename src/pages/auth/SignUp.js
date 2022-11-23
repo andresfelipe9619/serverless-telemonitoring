@@ -14,7 +14,7 @@ function SignUp() {
           {/*Custom inputs */}
           <CheckboxField
             name='custom:role'
-            value='doctor'
+            value='DOCTOR'
             label='Soy Doctor'
           />
         </>

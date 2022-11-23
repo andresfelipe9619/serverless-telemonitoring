@@ -74,7 +74,7 @@ function App () {
 
 function ProtectedRoute ({ user, doctoronly, children }) {
   console.log('User: ', user)
-  const isDoctor = user?.attributes['custom:role'] === 'doctor'
+  const isDoctor = user?.attributes['custom:role'] === 'DOCTOR'
   const userId = user?.username
   const item = localStorage.getItem('profile-completed')
   const completed = isNaN(item) ? 1 : +item
@@ -93,7 +93,7 @@ async function handleSignUp (formData) {
   let { username, password, attributes } = formData
   username = username.toLowerCase()
   attributes.email = attributes.email.toLowerCase()
-  attributes['custom:role'] = attributes['custom:role'] || 'patient'
+  attributes['custom:role'] = attributes['custom:role'] || 'PATIENT'
   const result = await Auth.signUp({
     username,
     password,

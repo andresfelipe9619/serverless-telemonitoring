@@ -107,21 +107,6 @@
           }
         }
       ]
-    },
-    "cronlambda": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "api",
-          "resourceName": "TelemonitoringAPI",
-          "attributes": [
-            "ApiName",
-            "ApiId"
-          ]
-        }
-      ]
     }
   },
   "storage": {
