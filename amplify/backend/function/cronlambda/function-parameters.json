@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "storage": {
+      "telemonitoring": [
+        "create",
+        "read",
+        "update"
+      ],
+      "appdata": [
+        "create",
+        "read",
+        "update"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
