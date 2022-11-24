@@ -171,7 +171,7 @@ app.post(path, async function (req, res) {
   if (userIdPresent) {
     body['userId'] = identity.cognitoIdentityId || UNAUTH
   }
-  const { doctor, ...patient } = body
+  const { doctor, notify, ...patient } = body
   if (doctor) patient.doctor = doctor?.SK || ''
   const putItemParams = {
     TableName: tableName,
@@ -179,7 +179,7 @@ app.post(path, async function (req, res) {
   }
   try {
     const data = await dynamodb.put(putItemParams).promise()
-    if (doctor) await notifyDoctorForNewPatientAssigned(doctor, patient)
+    if (doctor && notify) await notifyDoctorForNewPatientAssigned(doctor, patient)
     res.json({ success: 'post call succeed!', url, data })
   } catch (error) {
     res.statusCode = 500
