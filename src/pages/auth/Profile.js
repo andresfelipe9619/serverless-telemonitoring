@@ -96,6 +96,7 @@ function Profile ({ user }) {
       try {
         const result = await addImageToS3(uploadedFile)
         console.log('result', result)
+        photo = result.key
       } catch (error) {
         console.log('Error uploading file: ', error)
       }

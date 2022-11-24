@@ -21,7 +21,7 @@ export default function Geolocation ({
       function (error) {
         console.error(error)
       },
-      { maximumAge: 0, timeout: 5000, enableHighAccuracy: true }
+      { maximumAge: 0, timeout: 15000, enableHighAccuracy: true }
     )
     // eslint-disable-next-line
   }, [locateUser, isDoctor])
@@ -30,12 +30,13 @@ export default function Geolocation ({
   const [latitude, longitude] = coords || []
   return (
     <View width={'100%'}>
-      <Flex margin={[8, 16]} alignItems='center' alignContent="center">
+      <Flex margin={[8, 16]} alignItems='center' alignContent='center'>
         <TextField
           name='latitude'
           label='Latitude'
           value={latitude}
           type='number'
+          onChange={e => setCoords(prev => [e.target.value, prev[1]])}
           isDisabled={isDoctor}
         />
         <TextField
@@ -43,12 +44,15 @@ export default function Geolocation ({
           label='Longitude'
           value={longitude}
           type='number'
+          onChange={e => setCoords(prev => [prev[0], e.target.value])}
           isDisabled={isDoctor}
         />
-        <Alert variation='info'>
-          Es necesario habilitar la geolocalización en el navegador para obtener
-          la ubicación.
-        </Alert>
+        {!isDoctor && (
+          <Alert variation='info'>
+            Es necesario habilitar la geolocalización en el navegador para
+            obtener la ubicación.
+          </Alert>
+        )}
       </Flex>
       {latitude && longitude && (
         <MapContainer

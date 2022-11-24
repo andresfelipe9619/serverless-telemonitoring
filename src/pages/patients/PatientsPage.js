@@ -45,23 +45,25 @@ function PatientCard ({ patient, go2 }) {
   const src = patient?.photo
   return (
     <Card variation='elevated' className='patient-card col-3'>
-      {src && (
-        <Image
-          alt='Foto Perfil'
-          src={src}
-          objectFit='initial'
-          objectPosition='50% 50%'
-          borderRadius='50%'
-          backgroundColor='initial'
-          height='auto'
-          width='180px'
-          opacity='100%'
-        />
-      )}
-      <Heading>{patient.name}</Heading>
-      <Button onClick={go2(`/patients/${patient?.cognito_id}`)}>
-        Telemonitoreo
-      </Button>
+      <Flex direction='column' alignItems='center' justifyContent='center'>
+        {src && (
+          <Image
+            alt='Foto Perfil'
+            src={src}
+            objectFit='initial'
+            objectPosition='50% 50%'
+            borderRadius='50%'
+            backgroundColor='initial'
+            height='auto'
+            width='100px'
+            opacity='100%'
+          />
+        )}
+        <Heading>{patient.name}</Heading>
+        <Button onClick={go2(`/patients/${patient?.SK}`)}>
+          Telemonitoreo
+        </Button>
+      </Flex>
     </Card>
   )
 }

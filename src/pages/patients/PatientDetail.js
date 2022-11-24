@@ -28,10 +28,8 @@ export default function PatientDetail (props) {
   const { user } = props
   const { id } = params
 
-  const [
-    { data, loading, error },
-    { getPatientData, assignDevice }
-  ] = usePatientData()
+  const [{ data, loading, error }, { getPatientData, assignDevice }] =
+    usePatientData()
 
   const go2 = path => () => navigate(path)
 
@@ -76,10 +74,8 @@ export default function PatientDetail (props) {
 
 function Content ({ user, patient, handleAssignDevice }) {
   const [{ data: devices }, { getDevices }] = useDevices()
-  const [
-    { data: doctors, loading: loadingDoctors },
-    { getDoctors }
-  ] = useDoctors()
+  const [{ data: doctors, loading: loadingDoctors }, { getDoctors }] =
+    useDoctors()
   const [device, setDevice] = useState(null)
   const [coords, setCoords] = useState([])
 
@@ -107,7 +103,7 @@ function Content ({ user, patient, handleAssignDevice }) {
         <Image
           margin={32}
           alt='Foto Paciente'
-          src={logo}
+          src={patient?.photo || logo}
           objectFit='initial'
           objectPosition='50% 50%'
           backgroundColor='initial'
