@@ -42,9 +42,10 @@ export default function ReportsPage () {
   }, [patientId])
 
   function handleAnalysis () {
+    const format = date => date.replace(/T/, ' ').replace(/Z/, '')
     const filters = {
-      startDate: startDate.replace(/T/, ' ').replace(/Z/, ''),
-      endDate: endDate.replace(/T/, ' ').replace(/Z/, '')
+      startDate: format(startDate),
+      endDate: format(endDate)
     }
     console.log('filters', filters)
     return getTelemonitoringData(patient.device_id, filters)
