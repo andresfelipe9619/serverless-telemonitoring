@@ -81,6 +81,21 @@ function Profile ({ user }) {
   const isDoctor = PK === 'DOCTOR'
   const device_id = profileData?.device_id || ''
 
+  async function uploadPhoto () {
+    try {
+      let photo = profileData?.photo || ''
+      if (!uploadedFile) return photo
+
+      const result = await addImageToS3(uploadedFile)
+      console.log('result', result)
+      photo = result.key
+      console.log('photo', photo)
+      return photo
+    } catch (error) {
+      console.log('Error uploading file: ', error)
+    }
+  }
+
   async function onSubmit (values) {
     const profile = {
       ...values,
@@ -90,19 +105,15 @@ function Profile ({ user }) {
     }
     console.log('profile', profile)
     const phone = getPhonenumber(profile)
-    const doctor = doctors.find(d => d.SK === profile.doctor)
-    let photo = profileData?.photo || ''
-    if (uploadedFile) {
-      try {
-        const result = await addImageToS3(uploadedFile)
-        console.log('result', result)
-        photo = result.key
-      } catch (error) {
-        console.log('Error uploading file: ', error)
-      }
+    const doctor = doctors.find(d => d.SK === profile?.doctor)
+    const photo = await uploadPhoto()
+    const notify = profile?.doctor && profileData.doctor !== profile.doctor
+    const haveChanged = Object.entries(profileData).some(
+      ([key, value]) => profile[key] !== value
+    )
+    if (haveChanged) {
+      await updateUser({ ...profile, email, doctor, phone, photo, notify })
     }
-    console.log('photo', photo)
-    await updateUser({ ...profile, email, doctor, phone, photo })
     localStorage.setItem('profile-completed', 1)
     navigate('/')
   }
@@ -140,7 +151,7 @@ function Profile ({ user }) {
     }
   }
 
-  const src = avatar || profileData?.photo
+  const src = avatar || profileData?.signedPhoto
 
   return (
     <Flex direction={'column'} alignItems='center' width='100%'>

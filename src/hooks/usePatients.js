@@ -19,11 +19,11 @@ function usePatients () {
       let response = await API.get('TelemonitoringAPI', '/app/PK', options)
       response = await Promise.all(
         response.map(async patient => {
-          let photo = patient.photo || ''
-          if (photo) {
-            photo = await getFileFromS3(patient?.photo)
+          let signedPhoto = ''
+          if (patient?.photo) {
+            signedPhoto = await getFileFromS3(patient.photo)
           }
-          return { ...patient, photo }
+          return { ...patient, signedPhoto }
         })
       )
       console.log('Patients: ', response)

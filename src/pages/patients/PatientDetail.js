@@ -103,7 +103,7 @@ function Content ({ user, patient, handleAssignDevice }) {
         <Image
           margin={32}
           alt='Foto Paciente'
-          src={patient?.photo || logo}
+          src={patient?.signedPhoto || logo}
           objectFit='initial'
           objectPosition='50% 50%'
           backgroundColor='initial'

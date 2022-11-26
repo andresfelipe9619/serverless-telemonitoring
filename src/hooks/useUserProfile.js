@@ -35,7 +35,7 @@ export default function useUserProfile () {
       )
       console.log('Profile Data: ', response)
       if (response?.photo) {
-        response.photo = await getFileFromS3(response?.photo)
+        response.signedPhoto = await getFileFromS3(response?.photo)
       }
       setData(response)
     } catch (error) {

@@ -17,7 +17,7 @@ export const getFileExtension = (fileName, forceLowerCase = true) => {
   return extension
 }
 
-export const getFileFromS3 = async key => {
+export const getFileFromS3 = key => {
   if (!key) return null
   return Storage.get(key)
 }

@@ -42,7 +42,7 @@ export default function PatientsPage ({ user }) {
 
 function PatientCard ({ patient, go2 }) {
   if (!patient) return null
-  const src = patient?.photo
+  const src = patient?.signedPhoto
   return (
     <Card variation='elevated' className='patient-card col-3'>
       <Flex direction='column' alignItems='center' justifyContent='center'>

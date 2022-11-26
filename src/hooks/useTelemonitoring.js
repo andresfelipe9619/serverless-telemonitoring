@@ -9,7 +9,7 @@ function useTelemonitoring () {
   const getTelemonitoringData = useCallback(
     async function getTelemonitoringData (
       device_id,
-      { size = 40, startDate, endDate } = {}
+      { size = 40, startDate, endDate, concat } = {}
     ) {
       try {
         setError(null)
@@ -17,7 +17,7 @@ function useTelemonitoring () {
         const options = {
           queryStringParameters: {
             device_id,
-            size,
+            ...(size ? { size } : null),
             ...(startDate ? { start_date: startDate } : null),
             ...(endDate ? { end_date: endDate } : null)
           }
@@ -28,7 +28,7 @@ function useTelemonitoring () {
           options
         )
         console.log('response', response)
-        setData(response)
+        setData(prev => (concat ? prev.concat(response) : response))
       } catch (error) {
         console.error(error)
         setError(error)
