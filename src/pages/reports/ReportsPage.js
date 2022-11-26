@@ -24,10 +24,8 @@ export default function ReportsPage () {
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
   const params = useParams()
-  const [
-    { data, error, loading },
-    { getTelemonitoringData }
-  ] = useTelemonitoring()
+  const [{ data, error, loading }, { getTelemonitoringData }] =
+    useTelemonitoring()
   const [
     { data: patient, loading: loadingPatient, error: errorPatient },
     { getPatientData }

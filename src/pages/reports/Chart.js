@@ -1,4 +1,10 @@
-import { ResponsiveLine } from '@nivo/line'
+import React, { Component } from 'react'
+import { Line, ResponsiveLine } from '@nivo/line'
+import range from 'lodash/range'
+import last from 'lodash/last'
+import { timeFormat } from 'd3-time-format'
+import * as time from 'd3-time'
+import { format } from 'date-fns'
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
@@ -76,15 +82,117 @@ const Chart = ({ data }) => (
   />
 )
 
-function formatTimestamp (timestamp) {
-  const options = {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric'
+const commonProperties = {
+  width: 900,
+  height: 400,
+  margin: { top: 20, right: 20, bottom: 60, left: 80 },
+  animate: true,
+  enableSlices: 'x'
+}
+
+class RealTimeChart extends Component {
+  constructor (props) {
+    super(props)
+
+    const date = new Date()
+    date.setMinutes(0)
+    date.setSeconds(0)
+    date.setMilliseconds(0)
+
+    this.state = {
+      dataA: range(100).map(i => ({
+        x: time.timeMinute.offset(date, i * 30),
+        y: 10 + Math.round(Math.random() * 20)
+      })),
+      dataB: range(100).map(i => ({
+        x: time.timeMinute.offset(date, i * 30),
+        y: 30 + Math.round(Math.random() * 20)
+      })),
+      dataC: range(100).map(i => ({
+        x: time.timeMinute.offset(date, i * 30),
+        y: 60 + Math.round(Math.random() * 20)
+      }))
+    }
+
+    this.formatTime = timeFormat('%Y %b %d')
   }
-  return new Date(timestamp).toLocaleString('en-US', options)
+
+  componentDidMount () {
+    this.timer = setInterval(this.next, 100)
+  }
+
+  componentWillUnmount () {
+    clearInterval(this.timer)
+  }
+
+  next = () => {
+    const dataA = this.state.dataA.slice(1)
+    dataA.push({
+      x: time.timeMinute.offset(last(dataA).x, 30),
+      y: 10 + Math.round(Math.random() * 20)
+    })
+    const dataB = this.state.dataB.slice(1)
+    dataB.push({
+      x: time.timeMinute.offset(last(dataB).x, 30),
+      y: 30 + Math.round(Math.random() * 20)
+    })
+    const dataC = this.state.dataC.slice(1)
+    dataC.push({
+      x: time.timeMinute.offset(last(dataC).x, 30),
+      y: 60 + Math.round(Math.random() * 20)
+    })
+
+    this.setState({ dataA, dataB, dataC })
+  }
+
+  render () {
+    const { dataA, dataB, dataC } = this.state
+
+    return (
+      <Line
+        {...commonProperties}
+        margin={{ top: 30, right: 50, bottom: 60, left: 50 }}
+        data={[
+          { id: 'A', data: dataA },
+          { id: 'B', data: dataB },
+          { id: 'C', data: dataC }
+        ]}
+        xScale={{ type: 'time', format: 'native' }}
+        yScale={{ type: 'linear', max: 100 }}
+        axisTop={{
+          format: '%H:%M',
+          tickValues: 'every 4 hours'
+        }}
+        axisBottom={{
+          format: '%H:%M',
+          tickValues: 'every 4 hours',
+          legend: `${this.formatTime(dataA[0].x)} ——— ${this.formatTime(
+            last(dataA).x
+          )}`,
+          legendPosition: 'middle',
+          legendOffset: 46
+        }}
+        axisRight={{}}
+        enablePoints={false}
+        enableGridX={true}
+        curve='monotoneX'
+        animate={false}
+        motionStiffness={120}
+        motionDamping={50}
+        isInteractive={false}
+        enableSlices={false}
+        useMesh={true}
+        theme={{
+          axis: { ticks: { text: { fontSize: 14 } } },
+          grid: { line: { stroke: '#ddd', strokeDasharray: '1 2' } }
+        }}
+      />
+    )
+  }
+}
+
+function formatTimestamp (timestamp) {
+  return format(new Date(timestamp), "HH:mm:ss")
 }
 
 const defaultChartData = [
@@ -100,7 +208,7 @@ const defaultChartData = [
 
 function buildChartData (data) {
   const result = data
-    .sort((a, b) => new Date(b.SK) - new Date(a.SK))
+    // .sort((a, b) => new Date(b.SK) - new Date(a.SK))
     .reduce((chartData, item) => {
       let [HeartBeat, SPO2] = chartData
       if (!item.SK) return chartData
@@ -122,4 +230,5 @@ function buildChartData (data) {
   return result
 }
 
+export { RealTimeChart }
 export default Chart

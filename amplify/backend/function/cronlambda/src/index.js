@@ -24,7 +24,7 @@ const ses = new AWS.SES()
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
-const FORMAT = 'yyyy/MM/dd HH:mm:ss'
+const FORMAT = 'yyyy-MM-dd HH:mm:ss'
 const SUBJECT = 'INFORME CONSOLIDADO DE TELEMONITOREO DE SIGNOS VITALES'
 
 exports.handler = async event => {
