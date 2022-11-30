@@ -35,7 +35,10 @@
           "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
           "s3Key": "amplify-builds/cronlambda-5659493265726178706d-build.zip"
         },
-        "iotlambda": {}
+        "iotlambda": {
+          "deploymentBucketName": "amplify-telemonitoringapp-dev-211049-deployment",
+          "s3Key": "amplify-builds/iotlambda-723647594b32362b4731-build.zip"
+        }
       },
       "storage": {
         "telemonitoring": {},

@@ -18,7 +18,6 @@ import { useParams } from 'react-router-dom'
 import usePatientData from '../../hooks/usePatientData'
 import useTelemonitoring from '../../hooks/useTelemonitoring'
 import ErrorAlert from '../error/ErrorAlert'
-import Chart from './Chart'
 
 export default function ReportsPage () {
   const [startDate, setStartDate] = useState('')
@@ -82,14 +81,7 @@ export default function ReportsPage () {
           INFORME CONSOLIDADO DE TELEMONITOREO DE SIGNOS VITALES
         </Heading>
         {showLoader && <Loader variation='linear' />}
-        {haveData && (
-          <>
-            <AverageTable data={data} />
-            <View height='60vh'>
-              <Chart data={data} />
-            </View>
-          </>
-        )}
+        {haveData && <AverageTable data={data} />}
         {!haveData && !error && (
           <Text textAlign='center'>
             {showLoader ? 'Cargando' : 'No hay datos para mostrar'}...

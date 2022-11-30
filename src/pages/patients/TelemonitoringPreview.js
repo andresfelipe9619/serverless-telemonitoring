@@ -5,7 +5,7 @@ import ErrorAlert from '../error/ErrorAlert'
 import Chart from '../reports/Chart'
 import format from 'date-fns/format'
 import sub from 'date-fns/sub'
-import set from 'date-fns/set'
+// import set from 'date-fns/set'
 
 const FORMAT = 'yyyy-MM-dd HH:mm:ss'
 const DELAY = 5000
@@ -21,12 +21,7 @@ export default function TelemonitoringPreview ({ device }) {
 
     function tick () {
       const concat = lastDevice === device
-      const today = set(new Date('2022-11-14'), {
-        hours: 1,
-        minutes: 46,
-        seconds: count * SECONDS,
-        milliseconds: 0
-      })
+      const today = new Date()
       const filters = {
         concat,
         size: null,
@@ -52,7 +47,7 @@ export default function TelemonitoringPreview ({ device }) {
         {loading && <Loader variation='linear' />}
       </div>
       <ErrorAlert error={error} />
-      {<Chart data={data || []} />}
+      <Chart data={data || []} />
       {/* {<RealTimeChart data={data} />} */}
     </View>
   )
