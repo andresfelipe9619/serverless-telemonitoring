@@ -47,8 +47,7 @@ export default function TelemonitoringPreview ({ device }) {
         {loading && <Loader variation='linear' />}
       </div>
       <ErrorAlert error={error} />
-      <Chart data={data || []} />
-      {/* {<RealTimeChart data={data} />} */}
+      <Chart data={data || []} timestamp />
     </View>
   )
 }

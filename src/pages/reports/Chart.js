@@ -11,7 +11,7 @@ import { format } from 'date-fns'
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const Chart = ({ data }) => (
+const Chart = ({ data, timestamp = false }) => (
   <ResponsiveLine
     data={buildChartData(data)}
     margin={{ top: 50, right: 110, bottom: 120, left: 60 }}
@@ -27,12 +27,12 @@ const Chart = ({ data }) => (
       stacked: false
     }}
     colors={{ scheme: 'category10' }}
-    xFormat={formatTimestamp}
+    xFormat={timestamp ? formatTimestamp : formatDate}
     axisTop={null}
     axisRight={null}
     axisBottom={{
       tickRotation: 90,
-      format: formatTimestamp,
+      format: timestamp ? formatTimestamp : formatDate,
       tickValues: 5,
       legend: 'Time scale',
       legendOffset: -12
@@ -191,8 +191,12 @@ class RealTimeChart extends Component {
   }
 }
 
+function formatDate (timestamp) {
+  return format(new Date(timestamp), 'yyyy-MM-dd HH:mm:ss')
+}
+
 function formatTimestamp (timestamp) {
-  return format(new Date(timestamp), "HH:mm:ss")
+  return format(new Date(timestamp), 'HH:mm:ss')
 }
 
 const defaultChartData = [
