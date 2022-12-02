@@ -5,11 +5,11 @@ import ErrorAlert from '../error/ErrorAlert'
 import Chart from '../reports/Chart'
 import format from 'date-fns/format'
 import sub from 'date-fns/sub'
-// import set from 'date-fns/set'
 
-const FORMAT = 'yyyy-MM-dd HH:mm:ss'
-const DELAY = 5000
+const DELAY = 2000
 const SECONDS = DELAY / 1000
+const FORMAT = 'yyyy-MM-dd HH:mm:ss'
+
 export default function TelemonitoringPreview ({ device }) {
   const [{ data, error, loading }, { getTelemonitoringData }] =
     useTelemonitoring()

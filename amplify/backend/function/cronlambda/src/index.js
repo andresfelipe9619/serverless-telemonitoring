@@ -30,7 +30,7 @@ const SUBJECT = 'INFORME CONSOLIDADO DE TELEMONITOREO DE SIGNOS VITALES'
 exports.handler = async event => {
   console.log(`EVENT: ${JSON.stringify(event)}`)
   try {
-    const today = new Date('2022-11-14')
+    const today = new Date()
     const yesterday = sub(today, { days: 1 })
     const start_date = format(
       set(yesterday, {

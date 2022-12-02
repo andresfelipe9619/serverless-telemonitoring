@@ -21,6 +21,7 @@ import TelemonitoringPreview from './TelemonitoringPreview'
 import Geolocation from './Geolocation'
 import useDevices from '../../hooks/useDevices'
 import useDoctors from '../../hooks/useDoctors'
+import './styles.css'
 
 export default function PatientDetail (props) {
   const navigate = useNavigate()
@@ -42,12 +43,13 @@ export default function PatientDetail (props) {
   }, [id])
 
   if (error) return <ErrorAlert error={error} />
+  const isCurrentUserDoctor = user?.attributes['custom:role'] === 'DOCTOR'
 
   return (
     <Flex direction={'column'} alignContent={'center'}>
       <Card variation='elevated'>
-        <Heading level={2} margin={16} textAlign='center'>
-          DATOS DEL PACIENTE
+        <Heading level={3} margin={16}>
+          Datos del Paciente
         </Heading>
         {loading && <Loader variation='linear' />}
         {!id && <Heading>No hay paciente con el ID especificado: {id}</Heading>}
@@ -60,24 +62,26 @@ export default function PatientDetail (props) {
         )}
       </Card>
       <Card variation='elevated'>
-        <Heading level={2} margin={16} textAlign='center'>
-          VISUALIZACIÓN DE LECTURA SIGNOS VITALES
+        <Heading level={3} margin={16}>
+          Visualización de Signos Vitales
         </Heading>
-        <TelemonitoringPreview device={data.device_id} />
+        {data && <TelemonitoringPreview device={data.device_id} />}
         <Flex justifyContent='center' marginTop={32}>
           <Button onClick={go2(`/reports/${id}`)}>Historial</Button>
         </Flex>
+      </Card>
+      <Card variation='elevated'>
+        <Geolocation patient={data} isDoctor={isCurrentUserDoctor} />
       </Card>
     </Flex>
   )
 }
 
-function Content ({ user, patient, handleAssignDevice }) {
+function Content ({ patient, handleAssignDevice }) {
   const [{ data: devices }, { getDevices }] = useDevices()
   const [{ data: doctors, loading: loadingDoctors }, { getDoctors }] =
     useDoctors()
   const [device, setDevice] = useState(null)
-  const [coords, setCoords] = useState([])
 
   useEffect(() => {
     getDevices()
@@ -91,7 +95,6 @@ function Content ({ user, patient, handleAssignDevice }) {
   }, [patient])
 
   const doctor = (doctors || []).find(d => d.SK === patient.doctor)
-  const isCurrentUserDoctor = user?.attributes['custom:role'] === 'DOCTOR'
   return (
     <View padding={'32px'}>
       <Flex
@@ -114,9 +117,8 @@ function Content ({ user, patient, handleAssignDevice }) {
         />
         <Table
           variation='striped'
+          className='patient-table'
           highlightOnHover={false}
-          minWidth={'420px'}
-          maxWidth={'800px'}
         >
           <TableBody>
             <TableRow>
@@ -183,14 +185,6 @@ function Content ({ user, patient, handleAssignDevice }) {
             Liberar
           </Button>
         </Flex>
-      </Flex>
-      <Flex direction={'column'}>
-        <Heading>Ubicación Geográfica</Heading>
-        <Geolocation
-          coords={coords}
-          setCoords={setCoords}
-          isDoctor={isCurrentUserDoctor}
-        />
       </Flex>
     </View>
   )

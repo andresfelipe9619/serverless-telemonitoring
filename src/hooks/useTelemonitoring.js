@@ -1,6 +1,8 @@
 import { useCallback, useState } from 'react'
 import { API } from 'aws-amplify'
 
+const SIZE = 40
+
 function useTelemonitoring () {
   const [data, setData] = useState([])
   const [loading, setLoading] = useState(false)
@@ -9,7 +11,7 @@ function useTelemonitoring () {
   const getTelemonitoringData = useCallback(
     async function getTelemonitoringData (
       device_id,
-      { size = 40, startDate, endDate, concat } = {}
+      { size = SIZE, startDate, endDate, concat } = {}
     ) {
       try {
         setError(null)
@@ -28,7 +30,11 @@ function useTelemonitoring () {
           options
         )
         console.log('response', response)
-        setData(prev => (concat ? prev.concat(response) : response))
+
+        setData(prev => {
+          const newData = concat ? prev.concat(response).slice(-SIZE) : response
+          return newData
+        })
       } catch (error) {
         console.error(error)
         setError(error)

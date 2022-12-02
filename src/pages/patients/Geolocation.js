@@ -1,75 +1,99 @@
-import { Alert, Flex, TextField, View } from '@aws-amplify/ui-react'
 import 'leaflet'
-import { useEffect } from 'react'
-import { MapContainer, Marker, Popup, TileLayer } from 'react-leaflet'
+import {
+  Alert,
+  Flex,
+  Heading,
+  Loader,
+  TextField,
+  View
+} from '@aws-amplify/ui-react'
+import { useEffect, useState } from 'react'
+import { MapContainer, Marker, TileLayer } from 'react-leaflet'
+import usePatientData from '../../hooks/usePatientData'
 
-export default function Geolocation ({
-  coords,
-  setCoords,
-  isDoctor,
-  locateUser = true
-}) {
+const OPTIONS = {
+  maximumAge: 0,
+  timeout: 15000,
+  enableHighAccuracy: true
+}
+
+export default function Geolocation ({ isDoctor, patient, locateUser = true }) {
+  const [coords, setCoords] = useState([])
+  const [{ loading }, { assignGeolocation }] = usePatientData()
+  const patientLocation = JSON.parse(patient?.location || '[]') || []
+
+  async function handleSuccess (position) {
+    const { latitude, longitude } = position.coords
+    const location = [latitude, longitude]
+    console.log('Location: ', location)
+    if (!latitude || !longitude) return
+    setCoords(location)
+    await assignGeolocation(patient, location)
+  }
+
+  function handleError (error) {
+    console.error(error)
+  }
+
   useEffect(() => {
-    if (!locateUser || isDoctor) return
+    if (!locateUser || isDoctor || !patient) return
     console.log('Getting location...')
     navigator.geolocation.getCurrentPosition(
-      function (position) {
-        const { latitude, longitude } = position.coords
-        console.log('[latitude, longitude]', [latitude, longitude])
-        setCoords([latitude, longitude])
-      },
-      function (error) {
-        console.error(error)
-      },
-      { maximumAge: 0, timeout: 15000, enableHighAccuracy: true }
+      handleSuccess,
+      handleError,
+      OPTIONS
     )
     // eslint-disable-next-line
-  }, [locateUser, isDoctor])
+  }, [patient, locateUser, isDoctor])
 
-  console.log('coords', coords)
-  const [latitude, longitude] = coords || []
+  console.log('Coords: ', { patientLocation, coords })
+  const [latitude, longitude] = (isDoctor ? patientLocation : coords) || []
   return (
-    <View width={'100%'}>
-      <Flex margin={[8, 16]} alignItems='center' alignContent='center'>
-        <TextField
-          name='latitude'
-          label='Latitude'
-          value={latitude}
-          type='number'
-          onChange={e => setCoords(prev => [e.target.value, prev[1]])}
-          isDisabled={isDoctor}
-        />
-        <TextField
-          name='longitude'
-          label='Longitude'
-          value={longitude}
-          type='number'
-          onChange={e => setCoords(prev => [prev[0], e.target.value])}
-          isDisabled={isDoctor}
-        />
-        {!isDoctor && (
-          <Alert variation='info'>
-            Es necesario habilitar la geolocalización en el navegador para
-            obtener la ubicación.
-          </Alert>
-        )}
-      </Flex>
-      {latitude && longitude && (
-        <MapContainer
-          center={coords}
-          zoom={13}
-          scrollWheelZoom={false}
-          style={{ height: 300 }}
-        >
-          <TileLayer
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    <Flex direction={'column'}>
+      {loading && <Loader variation='linear' />}
+      <Heading level={3} margin={16}>
+        Ubicación Geográfica
+      </Heading>
+      <View width={'100%'}>
+        <Flex margin={[8, 16]} alignItems='center' alignContent='center'>
+          <TextField
+            name='latitude'
+            label='Latitude'
+            type='number'
+            isDisabled={isDoctor}
+            value={latitude}
+            onChange={e => setCoords(prev => [e.target.value, prev[1]])}
           />
-          <Marker position={coords}>
-            <Popup>A pretty CSS3 popup.</Popup>
-          </Marker>
-        </MapContainer>
-      )}
-    </View>
+          <TextField
+            name='longitude'
+            label='Longitude'
+            type='number'
+            isDisabled={isDoctor}
+            value={longitude}
+            onChange={e => setCoords(prev => [prev[0], e.target.value])}
+          />
+          {!isDoctor && (
+            <Alert variation='info'>
+              Es necesario habilitar la geolocalización en el navegador para
+              obtener la ubicación.
+            </Alert>
+          )}
+        </Flex>
+        {latitude && longitude && (
+          <MapContainer
+            center={coords}
+            zoom={13}
+            scrollWheelZoom={false}
+            style={{ height: 320 }}
+          >
+            <TileLayer
+              attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+              url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+            />
+            <Marker position={coords} />
+          </MapContainer>
+        )}
+      </View>
+    </Flex>
   )
 }

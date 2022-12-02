@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react'
 import { getFileFromS3 } from '../utils/aws'
 
 export default function usePatientData () {
-  const [data, setData] = useState([])
+  const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
