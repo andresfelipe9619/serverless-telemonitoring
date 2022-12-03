@@ -157,7 +157,7 @@ function Profile ({ user }) {
     <Flex direction={'column'} alignItems='center' width='100%'>
       {loading && <Loader variation='linear' />}
       <ErrorAlert error={error || fileError} />
-      <Card minWidth={420}>
+      <Card>
         <Heading level={3}>Datos Personales</Heading>
         <Flex
           marginBottom={40}
@@ -264,7 +264,7 @@ function Profile ({ user }) {
         )}
       </Card>
       {!isDoctor && (
-        <Card minWidth={420}>
+        <Card>
           <Heading level={3}>Datos Médicos</Heading>
           <Input
             name='height'

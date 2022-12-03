@@ -55,9 +55,9 @@ export default function ReportsPage () {
 
   return (
     <View>
-      <Card margin={20}>
+      <Card marginBottom={20}>
         <ErrorAlert error={error || errorPatient} />
-        <Flex justifyContent='center'>
+        <Flex justifyContent='center' wrap='wrap'>
           <TextField
             type='datetime-local'
             value={startDate}
@@ -78,7 +78,7 @@ export default function ReportsPage () {
         </Flex>
       </Card>
 
-      <Card margin={20}>
+      <Card marginTop={20}>
         <Heading textAlign='center' margin={20}>
           INFORME CONSOLIDADO DE TELEMONITOREO DE SIGNOS VITALES
         </Heading>
