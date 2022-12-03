@@ -20,7 +20,7 @@ const OPTIONS = {
 export default function Geolocation ({ isDoctor, patient, locateUser = true }) {
   const [coords, setCoords] = useState([])
   const [{ loading }, { assignGeolocation }] = usePatientData()
-  const patientLocation = JSON.parse(patient?.location || '[]') || []
+  const patientLocation = patient?.location || []
 
   async function handleSuccess (position) {
     const { latitude, longitude } = position.coords
@@ -47,7 +47,8 @@ export default function Geolocation ({ isDoctor, patient, locateUser = true }) {
   }, [patient, locateUser, isDoctor])
 
   console.log('Coords: ', { patientLocation, coords })
-  const [latitude, longitude] = (isDoctor ? patientLocation : coords) || []
+  const location = isDoctor ? patientLocation : coords
+  const [latitude, longitude] = location || []
   return (
     <Flex direction={'column'}>
       {loading && <Loader variation='linear' />}
@@ -81,7 +82,7 @@ export default function Geolocation ({ isDoctor, patient, locateUser = true }) {
         </Flex>
         {latitude && longitude && (
           <MapContainer
-            center={coords}
+            center={location}
             zoom={13}
             scrollWheelZoom={false}
             style={{ height: 320 }}
@@ -90,7 +91,7 @@ export default function Geolocation ({ isDoctor, patient, locateUser = true }) {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             />
-            <Marker position={coords} />
+            <Marker position={location} />
           </MapContainer>
         )}
       </View>
