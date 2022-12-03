@@ -13,10 +13,12 @@ import {
   TextField,
   View
 } from '@aws-amplify/ui-react'
+import format from 'date-fns/format'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import usePatientData from '../../hooks/usePatientData'
 import useTelemonitoring from '../../hooks/useTelemonitoring'
+import { calculateIndicators, DATE_FORMAT } from '../../utils'
 import ErrorAlert from '../error/ErrorAlert'
 import Chart from './Chart'
 
@@ -40,17 +42,16 @@ export default function ReportsPage () {
   }, [patientId])
 
   function handleAnalysis () {
-    const format = date => date.replace(/T/, ' ').replace(/Z/, '')
     const filters = {
-      startDate: format(startDate),
-      endDate: format(endDate)
+      startDate: format(new Date(startDate), DATE_FORMAT),
+      endDate: format(new Date(endDate), DATE_FORMAT)
     }
     console.log('filters', filters)
     return getTelemonitoringData(patient.device_id, filters)
   }
 
   const haveData = !!data.length
-  const showLoader = !haveData && (loading || loadingPatient)
+  const showLoader = loading || loadingPatient
 
   return (
     <View>
@@ -101,24 +102,7 @@ export default function ReportsPage () {
 }
 
 function AverageTable ({ data }) {
-  const { spo2, heartbeat } = data.reduce(
-    (acc, item) => {
-      return {
-        ...acc,
-        spo2: acc.spo2.concat(item.SPO2 || []),
-        heartbeat: acc.heartbeat.concat(item.HeartBeat || [])
-      }
-    },
-    {
-      spo2: [],
-      heartbeat: []
-    }
-  )
-  const spo2Average = average(spo2)
-  const heartbeatAverage = average(heartbeat)
-
-  const spo2Indicator = getSpo2Indicator(spo2Average)
-  const heartbeatIndicator = getHeartbeatIndicator(heartbeatAverage)
+  const { heartbeat, spo2 } = calculateIndicators(data)
 
   return (
     <Table
@@ -147,96 +131,21 @@ function AverageTable ({ data }) {
       <TableBody>
         <TableRow>
           <TableCell>SPO2</TableCell>
-          <TableCell>{spo2Average}</TableCell>
-          <TableCell backgroundColor={spo2Indicator.color}>
-            {spo2Indicator.name}
+          <TableCell>{spo2.average}</TableCell>
+          <TableCell backgroundColor={spo2.indicator.color}>
+            {spo2.indicator.name}
           </TableCell>
-          <TableCell>{spo2Indicator.tips}</TableCell>
+          <TableCell>{spo2.indicator.tips}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell>F. Cardiaca</TableCell>
-          <TableCell>{heartbeatAverage}</TableCell>
-          <TableCell backgroundColor={heartbeatIndicator.color}>
-            {heartbeatIndicator.name}
+          <TableCell>{heartbeat.average}</TableCell>
+          <TableCell backgroundColor={heartbeat.indicator.color}>
+            {heartbeat.indicator.name}
           </TableCell>
-          <TableCell>{heartbeatIndicator.tips}</TableCell>
+          <TableCell>{heartbeat.indicator.tips}</TableCell>
         </TableRow>
       </TableBody>
     </Table>
   )
 }
-
-// function calculateAge (birthday) {
-//   // birthday is a date
-//   const ageDifMs = Date.now() - birthday.getTime()
-//   const ageDate = new Date(ageDifMs) // miliseconds from epoch
-//   return Math.abs(ageDate.getUTCFullYear() - 1970)
-// }
-
-const getHeartbeatIndicator = average => {
-  if (average >= 98) {
-    return {
-      name: 'Inadecuado',
-      color: 'var(--amplify-colors-red-40)',
-      tips: ''
-    }
-  }
-  if (average >= 80) {
-    return {
-      name: 'Normal',
-      color: 'var(--amplify-colors-orange-40)',
-      tips: ''
-    }
-  }
-  if (average >= 70) {
-    return {
-      name: 'Bueno',
-      color: 'var(--amplify-colors-yellow-40)',
-      tips: ''
-    }
-  }
-  if (average >= 40) {
-    return {
-      name: 'Excelente',
-      color: 'var(--amplify-colors-green-40)',
-      tips: ''
-    }
-  }
-  return {
-    name: 'Inadecuado',
-    color: 'var(--amplify-colors-red-40)',
-    tips: ''
-  }
-}
-
-const getSpo2Indicator = average => {
-  if (average >= 98) {
-    return {
-      name: 'Normal',
-      color: 'var(--amplify-colors-green-40)',
-      tips: 'Todo bien'
-    }
-  }
-  if (average >= 95) {
-    return {
-      name: 'Insuficiente',
-      color: 'var(--amplify-colors-yellow-40)',
-      tips: 'Tolerable, paciente dificlmente nota influencia alguna'
-    }
-  }
-  if (average >= 90) {
-    return {
-      name: 'Disminuido',
-      color: 'var(--amplify-colors-orange-40)',
-      tips: 'Intervención inmediata'
-    }
-  }
-  return {
-    name: 'Crítico',
-    color: 'var(--amplify-colors-red-40)',
-    tips: 'Remitir a un especialista'
-  }
-}
-
-const average = data =>
-  Math.round(data.reduce((a, b) => a + b, 0) / data.length)

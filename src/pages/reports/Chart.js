@@ -5,6 +5,7 @@ import last from 'lodash/last'
 import { timeFormat } from 'd3-time-format'
 import * as time from 'd3-time'
 import { format } from 'date-fns'
+import { DATE_FORMAT } from '../../utils'
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
@@ -192,7 +193,7 @@ class RealTimeChart extends Component {
 }
 
 function formatDate (timestamp) {
-  return format(new Date(timestamp), 'yyyy-MM-dd HH:mm:ss')
+  return format(new Date(timestamp), DATE_FORMAT)
 }
 
 function formatTimestamp (timestamp) {

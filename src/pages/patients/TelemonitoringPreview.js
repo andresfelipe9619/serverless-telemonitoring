@@ -1,20 +1,19 @@
 import { Loader, View } from '@aws-amplify/ui-react'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef } from 'react'
 import useTelemonitoring from '../../hooks/useTelemonitoring'
 import ErrorAlert from '../error/ErrorAlert'
 import Chart from '../reports/Chart'
 import format from 'date-fns/format'
 import sub from 'date-fns/sub'
+import { DATE_FORMAT } from '../../utils'
 
 const DELAY = 2000
 const SECONDS = DELAY / 1000
-const FORMAT = 'yyyy-MM-dd HH:mm:ss'
 
 export default function TelemonitoringPreview ({ device }) {
   const [{ data, error, loading }, { getTelemonitoringData }] =
     useTelemonitoring()
   const lastDevice = usePrevious(device)
-  const [count, setCount] = useState(0)
 
   useEffect(() => {
     if (!device) return
@@ -25,21 +24,16 @@ export default function TelemonitoringPreview ({ device }) {
       const filters = {
         concat,
         size: null,
-        startDate: format(sub(today, { seconds: SECONDS }), FORMAT),
-        endDate: format(today, FORMAT)
+        startDate: format(sub(today, { seconds: SECONDS }), DATE_FORMAT),
+        endDate: format(today, DATE_FORMAT)
       }
-      setCount(prev => ++prev)
+
       getTelemonitoringData(device, filters)
     }
-    if (!count) {
-      tick()
-      setCount(1)
-    } else {
-      let id = setInterval(tick, DELAY)
-      return () => clearInterval(id)
-    }
+    let id = setInterval(tick, DELAY)
+    return () => clearInterval(id)
     // eslint-disable-next-line
-  }, [device, count])
+  }, [device])
 
   return (
     <View height='60vh'>

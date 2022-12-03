@@ -24,7 +24,7 @@ const ses = new AWS.SES()
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
-const FORMAT = 'yyyy-MM-dd HH:mm:ss'
+const DATE_FORMAT = 'yyyy-MM-dd HH:mm:ss'
 const SUBJECT = 'INFORME CONSOLIDADO DE TELEMONITOREO DE SIGNOS VITALES'
 
 exports.handler = async event => {
@@ -39,7 +39,7 @@ exports.handler = async event => {
         seconds: 0,
         milliseconds: 0
       }),
-      FORMAT
+      DATE_FORMAT
     )
     const end_date = format(
       set(yesterday, {
@@ -47,7 +47,7 @@ exports.handler = async event => {
         minutes: 59,
         seconds: 59
       }),
-      FORMAT
+      DATE_FORMAT
     )
     console.log('start_date', start_date)
     console.log('end_date', end_date)
