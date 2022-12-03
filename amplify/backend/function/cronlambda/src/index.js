@@ -87,7 +87,12 @@ async function notifyPatient (patient, query) {
 
     const spo2Indicator = getSpo2Indicator(spo2Average)
     const heartbeatIndicator = getHeartbeatIndicator(heartbeatAverage)
+    const salute = `Buen día ${patient.name} ${patient.lastname}, 
+    aquí le enviamos el informe de su telemonitoreo de signos vitales de ayer,
+    le sugerimos seguir las siguientes recomendaciones:`
+
     const tableProps = {
+      salute,
       spo2Average,
       spo2Indicator,
       heartbeatIndicator,
@@ -113,21 +118,27 @@ async function notifyPatient (patient, query) {
 }
 
 function buildSMS ({
-  spo2Average,
-  spo2Indicator,
-  heartbeatIndicator,
-  heartbeatAverage
-}) {
-  return `SPO2:${spo2Average}-${spo2Indicator.name}\nF.Cardiaca:${heartbeatAverage}-${heartbeatIndicator.name}`
-}
-
-function buildEmail ({
+  salute,
   spo2Average,
   spo2Indicator,
   heartbeatIndicator,
   heartbeatAverage
 }) {
   return `
+  ${salute}\n
+  SPO2: ${spo2Average} - ${spo2Indicator.name}\n
+  F.Cardiaca: ${heartbeatAverage} - ${heartbeatIndicator.name}`
+}
+
+function buildEmail ({
+  salute,
+  spo2Average,
+  spo2Indicator,
+  heartbeatIndicator,
+  heartbeatAverage
+}) {
+  return `
+  <p>${salute}</p>
   <table>
     <thead>
       <tr>
