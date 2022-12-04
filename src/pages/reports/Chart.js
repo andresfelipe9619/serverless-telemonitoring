@@ -6,82 +6,90 @@ import { timeFormat } from 'd3-time-format'
 import * as time from 'd3-time'
 import { format } from 'date-fns'
 import { DATE_FORMAT } from '../../utils'
+import useResponsive from '../../hooks/useResponsive'
 
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const Chart = ({ data, timestamp = false }) => (
-  <ResponsiveLine
-    data={buildChartData(data)}
-    margin={{ top: 50, right: 110, bottom: 120, left: 60 }}
-    // xScale={{
-    //   type: 'time',
-    //   format: '%Y-%m-%d %H:%M:%S',
-    //   useUTC: false,
-    //   precision: 'second'
-    // }}
-    // xFormat='time:%Y-%m-%d %H:%M:%S'
-    yScale={{
-      type: 'linear',
-      stacked: false
-    }}
-    colors={{ scheme: 'category10' }}
-    xFormat={timestamp ? formatTimestamp : formatDate}
-    axisTop={null}
-    axisRight={null}
-    axisBottom={{
-      tickRotation: 90,
-      format: timestamp ? formatTimestamp : formatDate,
-      tickValues: 5,
-      legend: 'Time scale',
-      legendOffset: -12
-    }}
-    axisLeft={{
-      orient: 'left',
-      tickSize: 5,
-      tickPadding: 5,
-      tickRotation: 0,
-      legend: 'count',
-      legendOffset: -40,
-      legendPosition: 'middle'
-    }}
-    pointSize={10}
-    pointColor={{ theme: 'background' }}
-    pointBorderWidth={2}
-    pointBorderColor={{ from: 'serieColor' }}
-    pointLabelYOffset={-12}
-    enableSlices={false}
-    useMesh={true}
-    legends={[
-      {
-        anchor: 'bottom-right',
-        direction: 'column',
-        justify: false,
-        translateX: 100,
-        translateY: 0,
-        itemsSpacing: 0,
-        itemDirection: 'left-to-right',
-        itemWidth: 80,
-        itemHeight: 20,
-        itemOpacity: 0.75,
-        symbolSize: 12,
-        symbolShape: 'circle',
-        symbolBorderColor: 'rgba(0, 0, 0, .5)',
-        effects: [
-          {
-            on: 'hover',
-            style: {
-              itemBackground: 'rgba(0, 0, 0, .03)',
-              itemOpacity: 1
-            }
-          }
-        ]
+const Chart = ({ data, timestamp = false }) => {
+  const { isMobile, screen } = useResponsive()
+  console.log('screen', screen)
+  const xFormat = timestamp ? formatTimestamp : formatDate
+
+  return (
+    <ResponsiveLine
+      data={buildChartData(data)}
+      margin={
+        isMobile
+          ? { top: 50, right: 10, bottom: 120, left: 10 }
+          : { top: 50, right: 60, bottom: 120, left: 60 }
       }
-    ]}
-  />
-)
+      yScale={{
+        type: 'linear',
+        stacked: false
+      }}
+      colors={{ scheme: 'category10' }}
+      xFormat={xFormat}
+      axisTop={null}
+      axisRight={null}
+      axisBottom={
+        isMobile
+          ? null
+          : {
+              tickRotation: 90,
+              format: xFormat,
+              legend: 'Time scale',
+              legendOffset: -12
+            }
+      }
+      axisLeft={{
+        orient: 'left',
+        tickPadding: 5,
+        tickRotation: 0,
+        legend: 'count',
+        legendOffset: -40,
+        legendPosition: 'middle'
+      }}
+      enablePoints={false}
+      enableGridX={true}
+      curve='monotoneX'
+      enableSlices={false}
+      motionStiffness={120}
+      motionDamping={50}
+      useMesh={true}
+      theme={{
+        grid: { line: { stroke: '#ddd', strokeDasharray: '1 2' } }
+      }}
+      legends={[
+        {
+          anchor: 'bottom-left',
+          direction: 'column',
+          justify: false,
+          translateY: 0,
+          itemsSpacing: 0,
+          itemDirection: 'left-to-right',
+          itemWidth: 80,
+          itemHeight: 20,
+          itemOpacity: 0.75,
+          symbolSize: 12,
+          symbolShape: 'circle',
+          symbolBorderColor: 'rgba(0, 0, 0, .5)',
+          effects: [
+            {
+              on: 'hover',
+              style: {
+                itemBackground: 'rgba(0, 0, 0, .03)',
+                itemOpacity: 1
+              }
+            }
+          ]
+        }
+      ]}
+    />
+  )
+}
 
 const commonProperties = {
   width: 900,

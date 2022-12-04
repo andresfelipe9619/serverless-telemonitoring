@@ -17,6 +17,7 @@ import format from 'date-fns/format'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import usePatientData from '../../hooks/usePatientData'
+import useResponsive from '../../hooks/useResponsive'
 import useTelemonitoring from '../../hooks/useTelemonitoring'
 import { calculateIndicators, DATE_FORMAT } from '../../utils'
 import ErrorAlert from '../error/ErrorAlert'
@@ -32,6 +33,7 @@ export default function ReportsPage () {
     { data: patient, loading: loadingPatient, error: errorPatient },
     { getPatientData }
   ] = usePatientData()
+  const { isMobile } = useResponsive()
 
   const { patientId } = params
 
@@ -57,7 +59,11 @@ export default function ReportsPage () {
     <View>
       <Card marginBottom={20}>
         <ErrorAlert error={error || errorPatient} />
-        <Flex justifyContent='center' wrap='wrap'>
+        <Flex
+          justifyContent='center'
+          wrap='wrap'
+          direction={isMobile ? 'column' : 'row'}
+        >
           <TextField
             type='datetime-local'
             value={startDate}
@@ -105,47 +111,55 @@ function AverageTable ({ data }) {
   const { heartbeat, spo2 } = calculateIndicators(data)
 
   return (
-    <Table
-      variation='bordered'
-      margin={'auto'}
-      highlightOnHover={false}
-      minWidth={'420px'}
-      maxWidth={'800px'}
-    >
-      <TableHead>
-        <TableRow>
-          <TableCell>
-            <strong>Signo Vital</strong>
-          </TableCell>
-          <TableCell>
-            <strong>Valor</strong>
-          </TableCell>
-          <TableCell>
-            <strong>Indicador</strong>
-          </TableCell>
-          <TableCell>
-            <strong>Recomendación</strong>
-          </TableCell>
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        <TableRow>
-          <TableCell>SPO2</TableCell>
-          <TableCell>{spo2.average}</TableCell>
-          <TableCell backgroundColor={spo2.indicator.color}>
-            {spo2.indicator.name}
-          </TableCell>
-          <TableCell>{spo2.indicator.tips}</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell>F. Cardiaca</TableCell>
-          <TableCell>{heartbeat.average}</TableCell>
-          <TableCell backgroundColor={heartbeat.indicator.color}>
-            {heartbeat.indicator.name}
-          </TableCell>
-          <TableCell>{heartbeat.indicator.tips}</TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+    <Flex wrap={'wrap'}>
+      <Table
+        variation='bordered'
+        margin={'auto'}
+        highlightOnHover={false}
+        minWidth={'200px'}
+        maxWidth={'800px'}
+      >
+        <TableHead>
+          <TableRow>
+            <TableCell>
+              <strong>Signo Vital</strong>
+            </TableCell>
+            <TableCell>
+              <strong>Valor</strong>
+            </TableCell>
+            <TableCell>
+              <strong>Indicador</strong>
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          <TableRow>
+            <TableCell>SPO2</TableCell>
+            <TableCell>{spo2.average}</TableCell>
+            <TableCell backgroundColor={spo2.indicator.color}>
+              {spo2.indicator.name}
+            </TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>F. Cardiaca</TableCell>
+            <TableCell>{heartbeat.average}</TableCell>
+            <TableCell backgroundColor={heartbeat.indicator.color}>
+              {heartbeat.indicator.name}
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+      <Flex direction='column' justifyContent='center'>
+        <strong>Recomendaciónes: </strong>
+        <Text>
+          <strong>SPO2 - </strong>{' '}
+          {spo2.indicator.tips || 'No hay recomendación.'}
+        </Text>
+        <Text>
+          <strong>F. Cardiaca - </strong>
+          {heartbeat.indicator.tips || 'No hay recomendación.'}
+        </Text>
+      </Flex>
+    </Flex>
   )
 }

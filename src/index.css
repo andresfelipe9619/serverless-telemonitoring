@@ -18,6 +18,11 @@ body {
   min-width: 100%
 }
 
+input[type="date"],
+input[type="datetime-local"] {
+  display: inline-flex
+}
+
 @media screen and (min-width: 768px) {
   .amplify-card {
     min-width: 420px
