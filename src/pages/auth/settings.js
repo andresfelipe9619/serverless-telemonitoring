@@ -1,13 +1,13 @@
 import * as Yup from 'yup'
 
-const OBLIGATORY_TEXT = 'Campo Obligatorio!'
+const getObligatoryText = field => `Campo ${field} Obligatorio!`
 
 export const COLOMBIAN_CODE = '+57'
 
 export const DocumentTypeOptions = [
   { value: 'T.I', label: 'T.I' },
   { value: 'C.C', label: 'C.C' },
-  { value: 'C.E', label: 'Cedula de Extrangería' },
+  { value: 'C.E', label: 'Cédula de Extrangería' },
   { value: 'R.C', label: 'Registro Civil' }
 ]
 
@@ -17,16 +17,15 @@ export const GenreOptions = [
   { value: 'OTRO', label: 'Otro' }
 ]
 
-
 export const validationSchema = Yup.object().shape({
-  height: Yup.number().required(OBLIGATORY_TEXT),
-  weight: Yup.number().required(OBLIGATORY_TEXT),
-  phone: Yup.number().required(OBLIGATORY_TEXT),
-  name: Yup.string().required(OBLIGATORY_TEXT),
-  document: Yup.string().required(OBLIGATORY_TEXT),
-  birthdate: Yup.string().required(OBLIGATORY_TEXT),
-  lastname: Yup.string().required(OBLIGATORY_TEXT),
-  document_type: Yup.string().required(OBLIGATORY_TEXT)
+  height: Yup.number().required(getObligatoryText('altura')),
+  weight: Yup.number().required(getObligatoryText('peso')),
+  phone: Yup.number().required(getObligatoryText('celular')),
+  name: Yup.string().required(getObligatoryText('nombre')),
+  document: Yup.string().required(getObligatoryText('documento')),
+  birthdate: Yup.string().required(getObligatoryText('f. nacimiento')),
+  lastname: Yup.string().required(getObligatoryText('apeliido')),
+  document_type: Yup.string().required(getObligatoryText('tipo documento'))
 })
 
 export const getInitialValues = profileData => ({
