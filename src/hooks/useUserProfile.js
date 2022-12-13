@@ -34,9 +34,6 @@ export default function useUserProfile () {
         `/app/object/${role}/${cognito_id}`
       )
       console.log('Profile Data: ', response)
-      if (response?.photo) {
-        response.signedPhoto = await getFileFromS3(response?.photo)
-      }
       setData(response)
     } catch (error) {
       console.error(error)

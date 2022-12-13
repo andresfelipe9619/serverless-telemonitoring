@@ -1,6 +1,5 @@
 import { API } from 'aws-amplify'
 import { useCallback, useState } from 'react'
-import { getFileFromS3 } from '../utils/aws'
 
 export default function usePatientData () {
   const [data, setData] = useState(null)
@@ -17,9 +16,6 @@ export default function usePatientData () {
         `/app/object/${PK}/${cognito_id}`
       )
       console.log('Profile Data: ', response)
-      if (response?.photo) {
-        response.signedPhoto = await getFileFromS3(response?.photo)
-      }
       setData(response)
     } catch (error) {
       console.error(error)

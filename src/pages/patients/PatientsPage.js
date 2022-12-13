@@ -14,6 +14,7 @@ import { useNavigate } from 'react-router-dom'
 import usePatients from '../../hooks/usePatients'
 import useTelemonitoring from '../../hooks/useTelemonitoring'
 import { calculateIndicators, DATE_FORMAT } from '../../utils'
+import { BUCKET_URL } from '../../utils/aws'
 import ErrorAlert from '../error/ErrorAlert'
 
 export default function PatientsPage ({ user }) {
@@ -46,11 +47,11 @@ export default function PatientsPage ({ user }) {
 
 function PatientCard ({ patient, go2 }) {
   if (!patient) return null
-  const src = patient?.signedPhoto
+  const src = BUCKET_URL + patient?.photo
   return (
     <Card variation='elevated' className='patient-card col-4'>
       <Flex direction='column' alignItems='center' justifyContent='center'>
-        {src && (
+        {patient?.photo && (
           <Image
             alt='Foto Perfil'
             src={src}

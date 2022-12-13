@@ -1,5 +1,8 @@
 import { Storage } from 'aws-amplify'
 
+export const BUCKET_URL =
+  'https://telemonitoringbucket211049-dev.s3.amazonaws.com/public/'
+
 export const removeFileFromS3 = file => Storage.remove(file)
 
 export const addImageToS3 = file =>

@@ -158,29 +158,7 @@
     "telemonitoringbucket": {
       "service": "S3",
       "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "telemonitoringauth",
-          "attributes": [
-            "UserPoolId"
-          ]
-        },
-        {
-          "category": "auth",
-          "resourceName": "userPoolGroups",
-          "attributes": [
-            "DoctorsGroupRole"
-          ]
-        },
-        {
-          "category": "auth",
-          "resourceName": "userPoolGroups",
-          "attributes": [
-            "PatientsGroupRole"
-          ]
-        }
-      ]
+      "dependsOn": []
     },
     "appdata": {
       "service": "DynamoDB",

@@ -22,7 +22,7 @@ import {
 import useUserProfile from '../../hooks/useUserProfile'
 import ErrorAlert from '../error/ErrorAlert'
 import { useNavigate } from 'react-router-dom'
-import { addImageToS3 } from '../../utils/aws'
+import { addImageToS3, BUCKET_URL } from '../../utils/aws'
 
 export const SUPPORTED_IMAGE_FORMATS = ['image/jpg', 'image/jpeg', 'image/png']
 
@@ -151,7 +151,7 @@ function Profile ({ user }) {
     }
   }
 
-  const src = avatar || profileData?.signedPhoto
+  const src = avatar || profileData?.photo
 
   return (
     <Flex direction={'column'} alignItems='center' width='100%'>
@@ -170,7 +170,7 @@ function Profile ({ user }) {
           {src && (
             <Image
               alt='Foto Perfil'
-              src={src}
+              src={avatar ? src : BUCKET_URL + src}
               objectFit='initial'
               objectPosition='50% 50%'
               borderRadius='50%'

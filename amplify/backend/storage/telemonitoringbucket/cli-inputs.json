@@ -2,19 +2,13 @@
   "resourceName": "telemonitoringbucket",
   "policyUUID": "011134ee",
   "bucketName": "telemonitoringbucket",
-  "storageAccess": "auth",
-  "guestAccess": [],
-  "authAccess": [],
-  "groupAccess": {
-    "Doctors": [
-      "CREATE_AND_UPDATE",
-      "READ",
-      "DELETE"
-    ],
-    "Patients": [
-      "CREATE_AND_UPDATE",
-      "READ",
-      "DELETE"
-    ]
-  }
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "READ",
+    "DELETE"
+  ]
 }

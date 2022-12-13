@@ -22,6 +22,7 @@ import Geolocation from './Geolocation'
 import useDevices from '../../hooks/useDevices'
 import useDoctors from '../../hooks/useDoctors'
 import './styles.css'
+import { BUCKET_URL } from '../../utils/aws'
 
 export default function PatientDetail (props) {
   const navigate = useNavigate()
@@ -95,6 +96,7 @@ function Content ({ patient, handleAssignDevice }) {
   }, [patient])
 
   const doctor = (doctors || []).find(d => d.SK === patient.doctor)
+  const src = BUCKET_URL + patient.photo
   return (
     <View padding={'32px'}>
       <Flex
@@ -106,7 +108,7 @@ function Content ({ patient, handleAssignDevice }) {
         <Image
           margin={32}
           alt='Foto Paciente'
-          src={patient?.signedPhoto || logo}
+          src={patient?.photo ? src : logo}
           objectFit='initial'
           objectPosition='50% 50%'
           backgroundColor='initial'

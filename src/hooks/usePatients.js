@@ -16,16 +16,7 @@ function usePatients () {
           role: 'PATIENT'
         }
       }
-      let response = await API.get('TelemonitoringAPI', '/app/PK', options)
-      response = await Promise.all(
-        response.map(async patient => {
-          let signedPhoto = ''
-          if (patient?.photo) {
-            signedPhoto = await getFileFromS3(patient.photo)
-          }
-          return { ...patient, signedPhoto }
-        })
-      )
+      const response = await API.get('TelemonitoringAPI', '/app/PK', options)
       console.log('Patients: ', response)
       setData(response)
     } catch (error) {
