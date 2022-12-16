@@ -3,9 +3,7 @@ import React, { useEffect, useRef } from 'react'
 import useTelemonitoring from '../../hooks/useTelemonitoring'
 import ErrorAlert from '../error/ErrorAlert'
 import Chart from '../reports/Chart'
-import format from 'date-fns/format'
 import sub from 'date-fns/sub'
-import { DATE_FORMAT } from '../../utils'
 
 const DELAY = 2000
 const SECONDS = DELAY / 1000
@@ -21,11 +19,14 @@ export default function TelemonitoringPreview ({ device }) {
     function tick () {
       const concat = lastDevice === device
       const today = new Date()
+      const start = sub(today, { seconds: SECONDS })
+      const startDate = start.toISOString()
+      const endDate = today.toISOString()
       const filters = {
         concat,
         size: null,
-        startDate: format(sub(today, { seconds: SECONDS }), DATE_FORMAT),
-        endDate: format(today, DATE_FORMAT)
+        startDate,
+        endDate
       }
 
       getTelemonitoringData(device, filters)

@@ -14,8 +14,7 @@ import useResponsive from '../../hooks/useResponsive'
 // website examples showcase many properties,
 // you'll often use just a few of them.
 const Chart = ({ data, timestamp = false }) => {
-  const { isMobile, screen } = useResponsive()
-  console.log('screen', screen)
+  const { isMobile } = useResponsive()
   const xFormat = timestamp ? formatTimestamp : formatDate
 
   return (
@@ -201,11 +200,14 @@ class RealTimeChart extends Component {
 }
 
 function formatDate (timestamp) {
-  return format(new Date(timestamp), DATE_FORMAT)
+  if (!timestamp) return ''
+  const date = new Date(timestamp + 'Z')
+  return format(date, DATE_FORMAT)
 }
 
 function formatTimestamp (timestamp) {
-  return format(new Date(timestamp), 'HH:mm:ss')
+  if (!timestamp) return ''
+  return format(new Date(timestamp + 'Z'), 'HH:mm:ss')
 }
 
 const defaultChartData = [

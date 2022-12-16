@@ -13,13 +13,12 @@ import {
   TextField,
   View
 } from '@aws-amplify/ui-react'
-import format from 'date-fns/format'
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import usePatientData from '../../hooks/usePatientData'
 import useResponsive from '../../hooks/useResponsive'
 import useTelemonitoring from '../../hooks/useTelemonitoring'
-import { calculateIndicators, DATE_FORMAT } from '../../utils'
+import { calculateIndicators } from '../../utils'
 import ErrorAlert from '../error/ErrorAlert'
 import Chart from './Chart'
 
@@ -44,9 +43,11 @@ export default function ReportsPage () {
   }, [patientId])
 
   function handleAnalysis () {
+    const start = new Date(startDate)
+    const end = new Date(endDate)
     const filters = {
-      startDate: format(new Date(startDate), DATE_FORMAT),
-      endDate: format(new Date(endDate), DATE_FORMAT)
+      startDate: start.toISOString(),
+      endDate: end.toISOString()
     }
     console.log('filters', filters)
     return getTelemonitoringData(patient.device_id, filters)

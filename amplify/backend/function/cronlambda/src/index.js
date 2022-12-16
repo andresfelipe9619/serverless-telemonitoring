@@ -12,7 +12,6 @@
 Amplify Params - DO NOT EDIT */
 
 const AWS = require('aws-sdk')
-const format = require('date-fns/format')
 const set = require('date-fns/set')
 const sub = require('date-fns/sub')
 const { getSpo2Indicator, getHeartbeatIndicator, average } = require('./utils')
@@ -24,7 +23,6 @@ const ses = new AWS.SES()
 /**
  * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
  */
-const DATE_FORMAT = 'yyyy-MM-dd HH:mm:ss'
 const SUBJECT = 'INFORME CONSOLIDADO DE TELEMONITOREO DE SIGNOS VITALES'
 
 exports.handler = async event => {
@@ -32,23 +30,17 @@ exports.handler = async event => {
   try {
     const today = new Date()
     const yesterday = sub(today, { days: 1 })
-    const start_date = format(
-      set(yesterday, {
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-        milliseconds: 0
-      }),
-      DATE_FORMAT
-    )
-    const end_date = format(
-      set(yesterday, {
-        hours: 23,
-        minutes: 59,
-        seconds: 59
-      }),
-      DATE_FORMAT
-    )
+    const start_date = set(yesterday, {
+      hours: 0,
+      minutes: 0,
+      seconds: 0,
+      milliseconds: 0
+    }).toISOString()
+    const end_date = set(yesterday, {
+      hours: 23,
+      minutes: 59,
+      seconds: 59
+    }).toISOString()
     console.log('start_date', start_date)
     console.log('end_date', end_date)
     const Patients = await getPatients()
