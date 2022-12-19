@@ -22,8 +22,8 @@ const Chart = ({ data, timestamp = false }) => {
       data={buildChartData(data)}
       margin={
         isMobile
-          ? { top: 50, right: 10, bottom: 120, left: 10 }
-          : { top: 50, right: 60, bottom: 120, left: 60 }
+          ? { top: 50, right: 10, bottom: 160, left: 10 }
+          : { top: 50, right: 60, bottom: 160, left: 60 }
       }
       yScale={{
         type: 'linear',

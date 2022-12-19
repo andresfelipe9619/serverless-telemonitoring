@@ -93,7 +93,7 @@ export default function ReportsPage () {
         {haveData && (
           <>
             <AverageTable data={data} />
-            <View height='60vh'>
+            <View height='70vh'>
               <Chart data={data} />
             </View>
           </>
