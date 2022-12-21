@@ -38,7 +38,7 @@ const getHeartbeatIndicator = average => {
     return {
       name: 'Normal',
       color: 'var(--amplify-colors-green-40)',
-      tips: ''
+      tips: 'Consumir alimentos ricos en potacio, preparar infusiones naturales o hacer msajes en el pecho pueden ayudar con tu salud.'
     }
   }
   return {

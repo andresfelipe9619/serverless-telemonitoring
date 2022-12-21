@@ -7,7 +7,7 @@ import {
   Loader,
   Text
 } from '@aws-amplify/ui-react'
-import set from 'date-fns/set'
+import sub from 'date-fns/sub'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import usePatients from '../../hooks/usePatients'
@@ -79,16 +79,12 @@ function VitalSigns ({ patient }) {
     const device = patient?.device_id
     if (!device) return
     const today = new Date()
-    const startDate = set(today, {
-      hours: 0,
-      minutes: 0,
-      seconds: 0,
-      milliseconds: 0
-    }).toISOString()
+    const startDate = sub(today, { hours: 1 }).toISOString()
 
     const endDate = today.toISOString()
     const filters = {
       startDate,
+      size: null,
       endDate
     }
     getTelemonitoringData(device, filters)
