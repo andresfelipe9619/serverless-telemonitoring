@@ -1,6 +1,5 @@
 import { API } from 'aws-amplify'
 import { useCallback, useState } from 'react'
-import { getFileFromS3 } from '../utils/aws'
 
 export default function useUserProfile () {
   const [data, setData] = useState([])

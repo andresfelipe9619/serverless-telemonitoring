@@ -1,6 +1,5 @@
 import { useCallback, useState } from 'react'
 import { API } from 'aws-amplify'
-import { getFileFromS3 } from '../utils/aws'
 
 function usePatients () {
   const [data, setData] = useState([])
