@@ -1,5 +1,5 @@
 import { Loader, View } from '@aws-amplify/ui-react'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import useTelemonitoring from '../../hooks/useTelemonitoring'
 import ErrorAlert from '../error/ErrorAlert'
 import Chart from '../reports/Chart'
@@ -10,17 +10,15 @@ const DELAY = 2000
 const SECONDS = DELAY / 1000
 const TESTING = false
 
-export default function TelemonitoringPreview ({ device }) {
+export default function TelemonitoringPreview ({ device, concat, setConcat }) {
   const [{ data, error, loading }, { getTelemonitoringData }] =
     useTelemonitoring()
-  const lastDevice = usePrevious(device)
   const [count, setCount] = useState(0)
 
   useEffect(() => {
     if (!device) return
-
+    console.log('concat :>> ', concat)
     function tick () {
-      const concat = lastDevice === device
       let today = new Date()
       if (TESTING) {
         today = set(new Date('2022-12-16'), {
@@ -41,6 +39,7 @@ export default function TelemonitoringPreview ({ device }) {
       }
       if (TESTING) setCount(prev => ++prev)
       getTelemonitoringData(device, filters)
+      if (!concat) setConcat(true)
     }
 
     if (!count && TESTING) {
@@ -51,7 +50,7 @@ export default function TelemonitoringPreview ({ device }) {
       return () => clearInterval(id)
     }
     // eslint-disable-next-line
-  }, [device, count])
+  }, [device, count, concat])
 
   return (
     <View height='60vh'>
@@ -62,12 +61,4 @@ export default function TelemonitoringPreview ({ device }) {
       <Chart data={data || []} timestamp />
     </View>
   )
-}
-
-function usePrevious (value) {
-  const ref = useRef()
-  useEffect(() => {
-    ref.current = value
-  }, [value])
-  return ref?.current
 }

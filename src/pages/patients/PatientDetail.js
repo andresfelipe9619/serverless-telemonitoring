@@ -30,8 +30,10 @@ export default function PatientDetail (props) {
   const { user } = props
   const { id } = params
 
-  const [{ data, loading, error }, { getPatientData, assignDevice }] =
-    usePatientData()
+  const [
+    { data, loading, error, concat },
+    { getPatientData, assignDevice, setConcat }
+  ] = usePatientData()
 
   const go2 = path => () => navigate(path)
 
@@ -66,7 +68,13 @@ export default function PatientDetail (props) {
         <Heading level={3} margin={16}>
           Visualización de Signos Vitales
         </Heading>
-        {data && <TelemonitoringPreview device={data.device_id} />}
+        {data && (
+          <TelemonitoringPreview
+            concat={concat}
+            device={data.device_id}
+            setConcat={setConcat}
+          />
+        )}
         <Flex justifyContent='center' marginTop={32}>
           <Button onClick={go2(`/reports/${id}`)}>Historial</Button>
         </Flex>

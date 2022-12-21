@@ -5,6 +5,7 @@ export default function usePatientData () {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+  const [concat, setConcat] = useState(true)
 
   const getPatientData = useCallback(async function getPatientData (cognito_id) {
     try {
@@ -60,6 +61,7 @@ export default function usePatientData () {
         }
       })
       setData(prev => ({ ...prev, device_id }))
+      setConcat(false)
       console.log('Profile Data: ', response)
     } catch (error) {
       setError(error)
@@ -70,7 +72,7 @@ export default function usePatientData () {
   [])
 
   return [
-    { data, loading, error },
-    { getPatientData, assignDevice, assignGeolocation }
+    { data, loading, error, concat },
+    { getPatientData, assignDevice, setConcat, assignGeolocation }
   ]
 }
